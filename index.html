@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Study Group On</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7ff;
+      color: #202b48;
+      text-align: center;
+    }
+    header {
+      padding: 20px;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-weight: bold; color: #4f46e5; }
+    button {
+      padding: 12px 20px;
+      border: 0;
+      border-radius: 10px;
+      background: #4f46e5;
+      color: white;
+      cursor: pointer;
+    }
+    main { padding: 80px 20px; }
+    h1 { font-size: 36px; }
+    p { line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Study Group On</div>
+    <button id="language" onclick="changeLanguage()">
+      Français
+    </button>
+  </header>
+
+  <main>
+    <h1 id="title">مرحبًا بك في Study Group On</h1>
+    <p id="description">
+      منصة تونسية لتبادل الدروس والملخصات والتمارين
+      بين التلاميذ.
+    </p>
+    <button id="start" onclick="startNow()">ابدأ الآن</button>
+  </main>
+
+  <script>
+    let currentLanguage = "ar";
+
+    function changeLanguage() {
+      currentLanguage =
+        currentLanguage === "ar" ? "fr" : "ar";
+
+      const french = currentLanguage === "fr";
+
+      document.documentElement.lang = currentLanguage;
+      document.documentElement.dir = french ? "ltr" : "rtl";
+
+      document.getElementById("language").textContent =
+        french ? "العربية" : "Français";
+
+      document.getElementById("title").textContent =
+        french
+          ? "Bienvenue sur Study Group On"
+          : "مرحبًا بك في Study Group On";
+
+      document.getElementById("description").textContent =
+        french
+          ? "Une plateforme tunisienne pour partager des cours, des résumés et des exercices entre élèves."
+          : "منصة تونسية لتبادل الدروس والملخصات والتمارين بين التلاميذ.";
+
+      document.getElementById("start").textContent =
+        french ? "Commencer" : "ابدأ الآن";
+    }
+
+    function startNow() {
+      alert(currentLanguage === "ar"
+        ? "قريبًا: إنشاء حساب التلميذ!"
+        : "Bientôt : création de compte !");
+    }
+  </script>
+</body>
+</html>
