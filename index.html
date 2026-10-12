@@ -536,5 +536,15 @@ if (localStorage.getItem("studyLanguage") === "fr") {
   switchLanguage();
 }
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const supabaseClient = window.supabase.createClient(
+    "https://bnhhgxqafrpujqvlxeay.supabase.co",
+    "sb_publishable_-WGB_VVs_JcQsBGnyEZahw_nFVKieL8"
+  );
+
+  console.log("Supabase initialized");
+</script>
 </body>
 </html>
