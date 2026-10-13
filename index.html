@@ -2,1141 +2,1374 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080d20">
-<title>Study Group.tn | معًا نحو التفوق</title>
-<style>
-:root {
-  --bg:#080d20;
-  --panel:#121b37;
-  --purple:#7958ff;
-  --blue:#368dff;
-  --text:#f5f6ff;
-  --muted:#adb9d5;
-}
-* { box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body {
-  margin:0;
-  font-family:Tahoma,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-a { color:inherit; text-decoration:none; }
-button { font:inherit; cursor:pointer; }
-nav {
-  position:sticky;
-  top:0;
-  z-index:10;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  padding:17px 6%;
-  background:#090f25ed;
-  backdrop-filter:blur(18px);
-  border-bottom:1px solid #ffffff18;
-}
-.logo {
-  font-size:23px;
-  font-weight:900;
-  letter-spacing:-.7px;
-  white-space:nowrap;
-}
-.logo span { color:#957aff; }
-.links {
-  display:flex;
-  gap:26px;
-  font-size:14px;
-}
-.links a:hover { color:#a99aff; }
-.actions {
-  display:flex;
-  gap:9px;
-  align-items:center;
-}
-.btn {
-  border:1px solid #ffffff38;
-  color:white;
-  background:transparent;
-  padding:12px 21px;
-  border-radius:12px;
-  transition:.25s;
-}
-.btn:hover {
-  transform:translateY(-3px);
-  border-color:#9989ff;
-}
-.primary {
-  background:linear-gradient(120deg,#8248ff,#368dff);
-  border:none;
-  box-shadow:0 6px 25px #654dff50;
-}
-.hero {
-  min-height:610px;
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  padding:95px 20px;
-  background:
-    radial-gradient(ellipse at 75% 25%,#4733a14f,transparent 45%),
-    radial-gradient(ellipse at 20% 80%,#125ab53b,transparent 50%),
-    #080d20;
-}
-.hero:before {
-  content:"";
-  position:absolute;
-  width:380px;
-  height:380px;
-  background:#6345ff;
-  filter:blur(150px);
-  opacity:.22;
-  top:0;
-  right:8%;
-  pointer-events:none;
-}
-.hero-content {
-  max-width:820px;
-  text-align:center;
-  position:relative;
-  z-index:1;
-}
-.tag {
-  display:inline-block;
-  color:#d0c7ff;
-  background:#7964ff20;
-  border:1px solid #9e8bff55;
-  padding:10px 20px;
-  border-radius:50px;
-  font-size:13px;
-}
-h1 {
-  font-size:clamp(39px,6vw,76px);
-  line-height:1.3;
-  margin:25px 0 12px;
-  letter-spacing:-1.5px;
-}
-.gradient {
-  background:linear-gradient(110deg,#ffffff,#9c8aff,#559fff);
-  background-clip:text;
-  -webkit-background-clip:text;
-  color:transparent;
-}
-.hero p {
-  color:var(--muted);
-  font-size:17px;
-  line-height:2;
-  max-width:660px;
-  margin:20px auto 30px;
-}
-.hero-buttons {
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:15px;
-}
-.hero-buttons .btn {
-  padding:16px 30px;
-  font-weight:bold;
-}
-.orb {
-  position:absolute;
-  border:1px solid #8d79ff44;
-  border-radius:50%;
-  pointer-events:none;
-}
-.orb.one {
-  width:480px;
-  height:480px;
-  transform:rotate(35deg);
-}
-.orb.two {
-  width:660px;
-  height:660px;
-  opacity:.4;
-}
-section {
-  padding:85px 7%;
-}
-.section-title {
-  text-align:center;
-  margin-bottom:42px;
-}
-.section-title h2 {
-  font-size:clamp(27px,4vw,40px);
-  margin:10px 0;
-}
-.section-title p {
-  color:var(--muted);
-  line-height:1.9;
-}
-.cards {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:20px;
-  max-width:1200px;
-  margin:auto;
-}
-.card {
-  background:linear-gradient(145deg,#172347,#10172e);
-  border:1px solid #849aff25;
-  border-radius:20px;
-  padding:29px 22px;
-  transition:.3s;
-}
-.card:hover {
-  transform:translateY(-7px);
-  border-color:#917aff;
-  box-shadow:0 15px 35px #0005;
-}
-.card .symbol {
-  display:grid;
-  place-items:center;
-  width:55px;
-  height:55px;
-  background:#7960ff24;
-  border-radius:16px;
-  font-size:27px;
-  margin-bottom:23px;
-}
-.card h3 { font-size:18px; }
-.card p {
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.9;
-}
-.steps-section {
-  background:linear-gradient(180deg,#111936,#0a1025);
-}
-.steps {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:25px;
-  max-width:1100px;
-  margin:auto;
-}
-.step {
-  padding:30px;
-  border:1px solid #ffffff20;
-  border-radius:20px;
-  background:#ffffff08;
-}
-.number {
-  width:45px;
-  height:45px;
-  display:grid;
-  place-items:center;
-  border-radius:14px;
-  background:linear-gradient(135deg,#7958ff,#358cff);
-  font-weight:bold;
-}
-.step h3 { margin-top:24px; }
-.step p {
-  color:var(--muted);
-  line-height:1.9;
-}
-.cta {
-  text-align:center;
-  background:
-    radial-gradient(ellipse at center,#45309a50,transparent 65%),
-    #080d20;
-}
-.cta h2 { font-size:clamp(28px,4vw,43px); }
-.cta p { color:var(--muted); line-height:1.9; }
-.cta .btn { margin-top:15px; }
-footer {
-  border-top:1px solid #ffffff20;
-  padding:30px 7%;
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  flex-wrap:wrap;
-  color:var(--muted);
-  font-size:13px;
-}
-footer strong { color:white; }
-@media(max-width:900px) {
-  .links { display:none; }
-  .cards { grid-template-columns:repeat(2,1fr); }
-}
-@media(max-width:600px) {
-  nav { padding:15px 4%; }
-  .logo { font-size:17px; }
-  .actions { gap:5px; }
-  .actions .btn { padding:10px; font-size:12px; }
-  .hero { min-height:550px; padding:75px 18px; }
-  .hero p { font-size:15px; }
-  .orb.one { width:300px; height:300px; }
-  .orb.two { width:430px; height:430px; }
-  section { padding:65px 5%; }
-  .cards { grid-template-columns:1fr 1fr; gap:12px; }
-  .card { padding:20px 15px; }
-  .card h3 { font-size:15px; }
-  .card p { font-size:12px; }
-  .steps { grid-template-columns:1fr; }
-}
-</style>
-</head>
-<body>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10172a">
+  <meta name="description" content="Study Group.tn - منصة تونسية للتعلم والتعاون بين التلامذة">
+  <title>Study Group.tn | نتعلموا مع بعضنا</title>
 
-<nav>
-  <a class="logo" href="#">
-    Study Group<span>.tn</span>
-  </a>
-  <div class="links">
-    <a href="#home" data-i18n="home">الرئيسية</a>
-    <a href="#features" data-i18n="features">المميزات</a>
-    <a href="#how" data-i18n="how">كيف تعمل؟</a>
-  </div>
-  <div class="actions">
-    <button class="btn" id="languageBtn"
-      onclick="switchLanguage()">FR 🌐</button>
-    <button class="btn primary" onclick="comingSoon()"
-      data-i18n="login">دخول</button>
-  </div>
-</nav>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<main>
-<div class="hero" id="home">
-  <div class="orb one"></div>
-  <div class="orb two"></div>
-  <div class="hero-content">
-    <span class="tag" data-i18n="tag">
-      🇹🇳 منصة تونسية، من التلاميذ وإليهم
-    </span>
-    <h1>
-      <span data-i18n="heroTitle">مستقبلك يبدأ</span>
-      <br>
-      <span class="gradient" data-i18n="heroHighlight">
-        بخطوة نعملوها مع بعضنا.
-      </span>
-    </h1>
-    <p data-i18n="heroDesc">
-      كل درس تفهمه، كل ملخص تحضّره، وكل تمرين تحلّه
-      ينجم يعاون تلميذ آخر. هنا نتشارك المعرفة
-      ونعاونوا بعضنا باش ننجحوا.
-    </p>
-    <div class="hero-buttons">
-      <button class="btn primary" onclick="comingSoon()"
-        data-i18n="start">ابدأ رحلتك ←</button>
-      <a class="btn" href="#how"
-        data-i18n="discover">اكتشف المنصة</a>
-    </div>
-  </div>
-</div>
-
-<section id="features">
-  <div class="section-title">
-    <span class="tag" data-i18n="featuresTag">
-      كل شيء في مكان واحد
-    </span>
-    <h2 data-i18n="featuresTitle">
-      أدوات تساعدك على التفوق
-    </h2>
-    <p data-i18n="featuresDesc">
-      محتوى دراسي منظم حسب السنة والشعبة والمادة.
-    </p>
-  </div>
-  <div class="cards">
-    <div class="card">
-      <div class="symbol">📚</div>
-      <h3 data-i18n="lessons">الدروس</h3>
-      <p data-i18n="lessonsDesc">
-        دروس منظمة حسب مستواك الدراسي وشعبتك.
-      </p>
-    </div>
-    <div class="card">
-      <div class="symbol">📝</div>
-      <h3 data-i18n="summaries">الملخصات</h3>
-      <p data-i18n="summariesDesc">
-        ملخصات تساعدك على الفهم والمراجعة.
-      </p>
-    </div>
-    <div class="card">
-      <div class="symbol">✏️</div>
-      <h3 data-i18n="exercises">تمارين وفروض</h3>
-      <p data-i18n="exercisesDesc">
-        تمارين وفروض لتطبيق ما تعلمته.
-      </p>
-    </div>
-    <div class="card">
-      <div class="symbol">🤝</div>
-      <h3 data-i18n="sharing">مشاركة الملفات</h3>
-      <p data-i18n="sharingDesc">
-        شارك ملفاتك وساعد تلاميذ آخرين.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="steps-section" id="how">
-  <div class="section-title">
-    <span class="tag" data-i18n="howTag">كيف تعمل المنصة؟</span>
-    <h2 data-i18n="howTitle">ثلاث خطوات بسيطة</h2>
-    <p data-i18n="howDesc">
-      من التسجيل إلى المشاركة والاستفادة.
-    </p>
-  </div>
-  <div class="steps">
-    <div class="step">
-      <div class="number">01</div>
-      <h3 data-i18n="step1">أنشئ حسابك</h3>
-      <p data-i18n="step1Desc">
-        سجّل واختر سنتك الدراسية وشعبتك ولغتك الاختيارية.
-      </p>
-    </div>
-    <div class="step">
-      <div class="number">02</div>
-      <h3 data-i18n="step2">اكتشف مكتبتك</h3>
-      <p data-i18n="step2Desc">
-        تصفح المواد والدروس والملخصات الخاصة بشعبتك.
-      </p>
-    </div>
-    <div class="step">
-      <div class="number">03</div>
-      <h3 data-i18n="step3">شارك واستفد</h3>
-      <p data-i18n="step3Desc">
-        ارفع ملفاتك واستفد من مساهمات زملائك.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="cta">
-  <span class="tag" data-i18n="ctaTag">
-    مع بعضنا ننجحوا
-  </span>
-  <h2 data-i18n="ctaTitle">
-    المعرفة تكبر كي نتقاسموها.
-  </h2>
-  <p data-i18n="ctaDesc">
-    خلّي تعبك ومجهودك ينفعك وينفع غيرك.
-  </p>
-  <button class="btn primary" onclick="comingSoon()"
-    data-i18n="join">انضم إلى Study Group.tn</button>
-</section>
-</main>
-
-<footer>
-  <strong>Study Group.tn</strong>
-  <span data-i18n="footer">
-    منصة تعليمية تونسية لتبادل المعرفة بين التلاميذ.
-  </span>
-</footer>
-
-<script>
-const translations = {
-  ar: {
-    home:"الرئيسية",
-    features:"المميزات",
-    how:"كيف تعمل؟",
-    login:"دخول",
-    tag:"🇹🇳 منصة تونسية، من التلاميذ وإليهم",
-    heroTitle:"مستقبلك يبدأ",
-    heroHighlight:"بخطوة نعملوها مع بعضنا.",
-    heroDesc:"كل درس تفهمه، كل ملخص تحضّره، وكل تمرين تحلّه ينجم يعاون تلميذ آخر. هنا نتشارك المعرفة ونعاونوا بعضنا باش ننجحوا.",
-    start:"ابدأ رحلتك ←",
-    discover:"اكتشف المنصة",
-    featuresTag:"كل شيء في مكان واحد",
-    featuresTitle:"أدوات تساعدك على التفوق",
-    featuresDesc:"محتوى دراسي منظم حسب السنة والشعبة والمادة.",
-    lessons:"الدروس",
-    lessonsDesc:"دروس منظمة حسب مستواك الدراسي وشعبتك.",
-    summaries:"الملخصات",
-    summariesDesc:"ملخصات تساعدك على الفهم والمراجعة.",
-    exercises:"تمارين وفروض",
-    exercisesDesc:"تمارين وفروض لتطبيق ما تعلمته.",
-    sharing:"مشاركة الملفات",
-    sharingDesc:"شارك ملفاتك وساعد تلاميذ آخرين.",
-    howTag:"كيف تعمل المنصة؟",
-    howTitle:"ثلاث خطوات بسيطة",
-    howDesc:"من التسجيل إلى المشاركة والاستفادة.",
-    step1:"أنشئ حسابك",
-    step1Desc:"سجّل واختر سنتك الدراسية وشعبتك ولغتك الاختيارية.",
-    step2:"اكتشف مكتبتك",
-    step2Desc:"تصفح المواد والدروس والملخصات الخاصة بشعبتك.",
-    step3:"شارك واستفد",
-    step3Desc:"ارفع ملفاتك واستفد من مساهمات زملائك.",
-    ctaTag:"مع بعضنا ننجحوا",
-    ctaTitle:"المعرفة تكبر كي نتقاسموها.",
-    ctaDesc:"خلّي تعبك ومجهودك ينفعك وينفع غيرك.",
-    join:"انضم إلى Study Group.tn",
-    footer:"منصة تعليمية تونسية لتبادل المعرفة بين التلاميذ.",
-    soon:"هذه الميزة قيد التطوير وستتوفر قريبًا!"
-  },
-  fr: {
-    home:"Accueil",
-    features:"Fonctionnalités",
-    how:"Comment ça marche ?",
-    login:"Connexion",
-    tag:"🇹🇳 Une plateforme tunisienne, par et pour les élèves",
-    heroTitle:"Ton avenir commence",
-    heroHighlight:"avec un pas ensemble.",
-    heroDesc:"Chaque cours compris, chaque résumé préparé et chaque exercice résolu peut aider un autre élève. Ensemble, partageons nos connaissances pour réussir.",
-    start:"Commencer →",
-    discover:"Découvrir la plateforme",
-    featuresTag:"Tout au même endroit",
-    featuresTitle:"Des outils pour réussir",
-    featuresDesc:"Des ressources classées par niveau, section et matière.",
-    lessons:"Cours",
-    lessonsDesc:"Des cours organisés selon ton niveau et ta section.",
-    summaries:"Résumés",
-    summariesDesc:"Des fiches pour comprendre et réviser.",
-    exercises:"Exercices et devoirs",
-    exercisesDesc:"Des exercices pour appliquer tes connaissances.",
-    sharing:"Partage de fichiers",
-    sharingDesc:"Partage tes documents et aide d'autres élèves.",
-    howTag:"Comment ça marche ?",
-    howTitle:"Trois étapes simples",
-    howDesc:"De l'inscription au partage des ressources.",
-    step1:"Crée ton compte",
-    step1Desc:"Inscris-toi et choisis ton niveau, ta section et ta langue optionnelle.",
-    step2:"Découvre ta bibliothèque",
-    step2Desc:"Consulte les matières et les documents de ta section.",
-    step3:"Partage et progresse",
-    step3Desc:"Ajoute tes fichiers et profite des contributions des autres.",
-    ctaTag:"Réussissons ensemble",
-    ctaTitle:"Le savoir grandit quand on le partage.",
-    ctaDesc:"Fais profiter les autres de tes efforts.",
-    join:"Rejoindre Study Group.tn",
-    footer:"Une plateforme éducative tunisienne de partage entre élèves.",
-    soon:"Cette fonctionnalité est en cours de développement !"
-  }
-};
-
-let language = "ar";
-
-function switchLanguage() {
-  language = language === "ar" ? "fr" : "ar";
-  document.documentElement.lang = language;
-  document.documentElement.dir =
-    language === "ar" ? "rtl" : "ltr";
-
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-    const key = el.getAttribute("data-i18n");
-    if (translations[language][key]) {
-      el.textContent = translations[language][key];
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #131c31;
+      --panel2: #192640;
+      --text: #f4f7ff;
+      --muted: #a8b5ce;
+      --primary: #8b7cff;
+      --secondary: #44d9c4;
+      --border: rgba(255,255,255,.10);
+      --danger: #ff7b91;
+      --radius: 20px;
     }
-  });
 
-  document.getElementById("languageBtn").textContent =
-    language === "ar" ? "FR 🌐" : "العربية 🌐";
+    * {
+      box-sizing: border-box;
+    }
 
-  localStorage.setItem("studyLanguage", language);
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-function comingSoon() {
-  alert(translations[language].soon);
-}
+    body {
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 10% 5%, rgba(139,124,255,.16), transparent 35%),
+        radial-gradient(ellipse at 90% 40%, rgba(68,217,196,.09), transparent 35%),
+        var(--bg);
+      min-height: 100vh;
+      line-height: 1.8;
+    }
 
-if (localStorage.getItem("studyLanguage") === "fr") {
-  switchLanguage();
-}
-</script>
+    button, input, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--secondary);
+      outline-offset: 3px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin-inline: auto;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(11,16,32,.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .brand-icon {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), #6555dc);
+      border-radius: 14px;
+      font-size: 23px;
+      box-shadow: 0 8px 28px rgba(139,124,255,.22);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 10px 17px;
+      color: var(--text);
+      background: var(--panel2);
+      font-weight: 700;
+      transition: .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.12);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #8b7cff, #6a5ae0);
+      border-color: transparent;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: rgba(68,217,196,.10);
+      border-color: rgba(68,217,196,.3);
+    }
+
+    .btn-google {
+      width: 100%;
+      background: white;
+      color: #242424;
+      border-color: #ddd;
+    }
+
+    .hero {
+      padding-block: 85px 65px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      align-items: center;
+      gap: 45px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(139,124,255,.35);
+      background: rgba(139,124,255,.10);
+      border-radius: 50px;
+      padding: 6px 14px;
+      color: #c7bfff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(35px, 5vw, 59px);
+      line-height: 1.35;
+      letter-spacing: -1.4px;
+      margin: 22px 0 15px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #a99cff, #44d9c4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-description {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 590px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 27px;
+    }
+
+    .hero-visual {
+      position: relative;
+      padding: 25px;
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, rgba(139,124,255,.15), rgba(68,217,196,.06));
+      border-radius: 30px;
+      min-height: 330px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 15px;
+      overflow: hidden;
+    }
+
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      background: rgba(139,124,255,.17);
+      filter: blur(55px);
+      top: -60px;
+      inset-inline-end: -40px;
+    }
+
+    .visual-card {
+      position: relative;
+      background: rgba(19,28,49,.9);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .visual-icon {
+      width: 50px;
+      height: 50px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: rgba(139,124,255,.15);
+      font-size: 25px;
+    }
+
+    .visual-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .visual-card strong {
+      display: block;
+    }
+
+    .section {
+      padding-block: 55px;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(25px, 4vw, 35px);
+      margin: 0 0 8px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature-card {
+      padding: 25px;
+      background: rgba(19,28,49,.85);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: .2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(139,124,255,.5);
+    }
+
+    .feature-card .emoji {
+      font-size: 31px;
+    }
+
+    .feature-card h3 {
+      margin: 10px 0 5px;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .study-panel {
+      background: rgba(19,28,49,.85);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 28px;
+    }
+
+    .study-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field label {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #0b1325;
+      color: var(--text);
+      min-width: 0;
+    }
+
+    .field input::placeholder {
+      color: #7887a2;
+    }
+
+    .field select option {
+      background: #131c31;
+      color: white;
+    }
+
+    .study-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .account-panel {
+      display: none;
+      margin-top: 25px;
+      padding: 23px;
+      border: 1px solid rgba(68,217,196,.28);
+      border-radius: 20px;
+      background: rgba(68,217,196,.06);
+    }
+
+    .account-panel.visible {
+      display: block;
+    }
+
+    .account-panel h3 {
+      margin-top: 0;
+    }
+
+    .account-email {
+      overflow-wrap: anywhere;
+      color: var(--secondary);
+    }
+
+    .status {
+      display: none;
+      padding: 11px 14px;
+      border-radius: 12px;
+      margin: 15px 0;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .status.visible {
+      display: block;
+    }
+
+    .status.success {
+      color: #9af3d9;
+      background: rgba(68,217,196,.10);
+      border: 1px solid rgba(68,217,196,.25);
+    }
+
+    .status.error {
+      color: #ffabb8;
+      background: rgba(255,123,145,.09);
+      border: 1px solid rgba(255,123,145,.25);
+    }
+
+    .status.info {
+      color: #d5d0ff;
+      background: rgba(139,124,255,.10);
+      border: 1px solid rgba(139,124,255,.25);
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+      padding-block: 28px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer strong {
+      color: var(--text);
+    }
+
+    /* Authentication modal */
+
+    .auth-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(3,7,18,.82);
+      backdrop-filter: blur(8px);
+      padding: 20px;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .auth-overlay.open {
+      display: flex;
+    }
+
+    .auth-box {
+      width: min(440px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      padding: 27px;
+      background: #131c31;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: 0 25px 90px rgba(0,0,0,.4);
+    }
+
+    .auth-close {
+      position: absolute;
+      top: 13px;
+      inset-inline-end: 13px;
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: var(--panel2);
+      color: white;
+      border: 1px solid var(--border);
+      font-size: 22px;
+    }
+
+    .auth-heading {
+      text-align: center;
+      padding-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    .auth-heading .brand-icon {
+      margin-inline: auto;
+    }
+
+    .auth-heading h2 {
+      margin: 12px 0 2px;
+    }
+
+    .auth-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .auth-form .btn {
+      width: 100%;
+    }
+
+    .auth-switch {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin: 17px 0 0;
+    }
+
+    .text-button {
+      border: 0;
+      background: transparent;
+      color: #b8adff;
+      font-weight: 700;
+      padding: 4px;
+    }
+
+    .separator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      margin: 15px 0;
+    }
+
+    .separator::before,
+    .separator::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    button:disabled {
+      opacity: .65;
+      cursor: wait;
+      transform: none;
+    }
+
+    @media (max-width: 800px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 55px;
+        gap: 30px;
+      }
+
+      .hero-visual {
+        min-height: 260px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .nav-inner {
+        min-height: 67px;
+        gap: 8px;
+      }
+
+      .brand {
+        font-size: 15px;
+        gap: 7px;
+      }
+
+      .brand-icon {
+        width: 37px;
+        height: 37px;
+        font-size: 20px;
+      }
+
+      .nav-actions {
+        gap: 6px;
+      }
+
+      .nav-actions .btn {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .hero {
+        padding-block: 43px 35px;
+      }
+
+      .hero-description {
+        font-size: 15px;
+      }
+
+      .hero-visual {
+        padding: 16px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .study-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .study-panel {
+        padding: 19px;
+      }
+
+      .auth-box {
+        padding: 22px 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="#home" aria-label="Study Group.tn">
+        <span class="brand-icon">📚</span>
+        <span>Study Group<span class="gradient-text">.tn</span></span>
+      </a>
+
+      <div class="nav-actions">
+        <button id="languageBtn" class="btn" type="button">FR</button>
+        <button id="loginBtn" class="btn" type="button" data-i18n="login">تسجيل الدخول</button>
+        <button id="signupBtn" class="btn btn-primary" type="button" data-i18n="signup">إنشاء حساب</button>
+        <button id="logoutBtn" class="btn hidden" type="button" data-i18n="logout">خروج</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="container hero">
+      <div>
+        <span class="eyebrow" data-i18n="eyebrow">✨ منصتك الدراسية التونسية</span>
+
+        <h1>
+          <span data-i18n="heroLine1">قرايتك تولّي أسهل</span><br>
+          <span class="gradient-text" data-i18n="heroLine2">كي نتعلموا مع بعضنا</span>
+        </h1>
+
+        <p class="hero-description" data-i18n="heroDescription">
+          مرحبًا بيك في Study Group.tn، مساحة للتلامذة التوانسة باش ينظّموا قرايتهم ويحضّروا للنجاح خطوة بخطوة.
+        </p>
+
+        <div class="hero-actions">
+          <button id="heroSignupBtn" class="btn btn-primary" type="button" data-i18n="startNow">ابدأ توّا مجانًا ←</button>
+          <a href="#study" class="btn btn-secondary" data-i18n="chooseLevel">اختار مستواك</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-label="Study Group">
+        <div class="visual-card">
+          <div class="visual-icon">🎯</div>
+          <div>
+            <strong data-i18n="visual1Title">أهداف واضحة</strong>
+            <p data-i18n="visual1Desc">قسّم قرايتك إلى خطوات صغيرة</p>
+          </div>
+        </div>
+
+        <div class="visual-card">
+          <div class="visual-icon">📖</div>
+          <div>
+            <strong data-i18n="visual2Title">تعلّم وتقدّم</strong>
+            <p data-i18n="visual2Desc">حضّر روحك لكل اختبار</p>
+          </div>
+        </div>
+
+        <div class="visual-card">
+          <div class="visual-icon">🤝</div>
+          <div>
+            <strong data-i18n="visual3Title">نتعاونوا مع بعضنا</strong>
+            <p data-i18n="visual3Desc">النجاح أحلى كي نتقاسمو المعرفة</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section" id="features">
+      <div class="section-heading">
+        <h2 data-i18n="featuresTitle">علاش Study Group.tn؟</h2>
+        <p data-i18n="featuresSubtitle">فضاء دراسي منظّم، معمول على خاطر التلامذة</p>
+      </div>
+
+      <div class="features-grid">
+        <article class="feature-card">
+          <span class="emoji">📚</span>
+          <h3 data-i18n="feature1Title">حسب مستواك</h3>
+          <p data-i18n="feature1Desc">اختار المستوى والشعبة متاعك بسهولة.</p>
+        </article>
+
+        <article class="feature-card">
+          <span class="emoji">🌍</span>
+          <h3 data-i18n="feature2Title">لغتان</h3>
+          <p data-i18n="feature2Desc">بدّل بين العربية والفرنسية وقت ما تحب.</p>
+        </article>
+
+        <article class="feature-card">
+          <span class="emoji">🔐</span>
+          <h3 data-i18n="feature3Title">حسابك الخاص</h3>
+          <p data-i18n="feature3Desc">سجّل دخولك عبر Supabase أو Google.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container section" id="study">
+      <div class="section-heading">
+        <h2 data-i18n="studyTitle">مسارك الدراسي</h2>
+        <p data-i18n="studySubtitle">اختار مستواك باش تشوف الشعب المتاحة</p>
+      </div>
+
+      <div class="study-panel">
+        <div class="study-controls">
+          <div class="field">
+            <label for="levelSelect" data-i18n="levelLabel">المستوى الدراسي</label>
+            <select id="levelSelect">
+              <option value="1">الأولى ثانوي</option>
+              <option value="2">الثانية ثانوي</option>
+              <option value="3">الثالثة ثانوي</option>
+              <option value="4">الرابعة ثانوي</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="branchSelect" data-i18n="branchLabel">الشعبة</label>
+            <select id="branchSelect"></select>
+          </div>
+        </div>
+
+        <p class="study-note" data-i18n="studyNote">
+          اختيار المستوى والشعبة هنا لا ينشئ سجلًا في قاعدة البيانات. يلزمك تسجيل الدخول لحسابك.
+        </p>
+
+        <div id="accountPanel" class="account-panel">
+          <h3 data-i18n="accountTitle">مرحبًا بيك في حسابك! 🎉</h3>
+          <p><span data-i18n="connectedAs">متصل بالبريد:</span> <strong id="accountEmail" class="account-email"></strong></p>
+          <p><span data-i18n="selectedLevel">المستوى:</span> <strong id="accountLevel"></strong></p>
+          <p><span data-i18n="selectedBranch">الشعبة:</span> <strong id="accountBranch"></strong></p>
+          <button id="saveSelectionBtn" class="btn btn-primary" type="button" data-i18n="saveSelection">تأكيد اختياري</button>
+        </div>
+
+        <div id="mainStatus" class="status" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <strong>Study Group.tn</strong>
+      <p data-i18n="footerText">نتعلموا، نتعاونوا، وننجحوا مع بعضنا 🇹🇳</p>
+      <span>© <span id="year"></span> Study Group.tn</span>
+    </div>
+  </footer>
+
+  <!-- Authentication modal -->
+  <div id="authOverlay" class="auth-overlay" aria-hidden="true">
+    <section class="auth-box" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button id="authClose" class="auth-close" type="button" aria-label="Close">×</button>
+
+      <div class="auth-heading">
+        <div class="brand-icon">📚</div>
+        <h2 id="authTitle">مرحبًا بيك!</h2>
+        <p id="authSubtitle">ادخل لحسابك وكمّل مسارك الدراسي</p>
+      </div>
+
+      <form id="authForm" class="auth-form">
+        <div id="nameField" class="field hidden">
+          <label for="fullName" data-i18n="nameLabel">الاسم</label>
+          <input id="fullName" type="text" autocomplete="name" maxlength="80" placeholder="اسمك">
+        </div>
+
+        <div class="field">
+          <label for="email" data-i18n="emailLabel">البريد الإلكتروني</label>
+          <input id="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
+        </div>
+
+        <div class="field">
+          <label for="password" data-i18n="passwordLabel">كلمة المرور</label>
+          <input id="password" type="password" autocomplete="current-password" required minlength="6" maxlength="128" placeholder="••••••••">
+        </div>
+
+        <button id="authSubmit" class="btn btn-primary" type="submit">تسجيل الدخول</button>
+      </form>
+
+      <div class="separator"><span data-i18n="or">أو</span></div>
+
+      <button id="googleBtn" class="btn btn-google" type="button">
+        <span aria-hidden="true">G</span>
+        <span data-i18n="googleLogin">المتابعة باستخدام Google</span>
+      </button>
+
+      <p class="auth-switch">
+        <span id="authSwitchText">ليس لديك حساب؟</span>
+        <button id="authSwitch" class="text-button" type="button">أنشئ حسابًا</button>
+      </p>
+
+      <div id="authStatus" class="status" role="status" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <!-- Supabase JavaScript client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-  const supabaseClient = window.supabase.createClient(
-    "https://bnhhgxqafrpujqvlxeay.supabase.co",
-    "sb_publishable_-WGB_VVs_JcQsBGnyEZahw_nFVKieL8"
-  );
+  <script>
+    "use strict";
 
-  console.log("Supabase initialized");
-</script>
-  
-<style>
-.auth-overlay {
-  position: fixed;
-  inset: 0;
-  background: #000b;
-  z-index: 1000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.auth-overlay.open { display: flex; }
-.auth-box {
-  background: #121b37;
-  color: white;
-  border: 1px solid #7958ff;
-  border-radius: 20px;
-  padding: 30px;
-  width: 100%;
-  max-width: 420px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.auth-box h2 { text-align: center; }
-.auth-box input {
-  width: 100%;
-  padding: 13px;
-  margin: 8px 0;
-  background: #080d20;
-  border: 1px solid #596485;
-  border-radius: 10px;
-  color: white;
-  font: inherit;
-}
-.auth-box button { margin-top: 10px; width: 100%; }
-.auth-box .close-auth {
-  width: auto;
-  float: left;
-}
-.auth-box a { color: #a99aff; cursor: pointer; }
-.auth-message { line-height: 1.8; text-align: center; }
-</style>
-.auth-overlay {
-<div id="authOverlay" class="auth-overlay">
-  <div class="auth-box">
-    <button class="btn close-auth" onclick="closeAuth()">✕</button>
-    <h2 id="authTitle">تسجيل الدخول</h2>
+    // 1. Supabase configuration
+    const SUPABASE_URL = "https://bnhhgxqafrpujqvlxeay.supabase.co";
 
-    <form id="authForm">
-      <input id="authEmail" type="email"
-        placeholder="البريد الإلكتروني"
-        autocomplete="email" required>
+    // Replace this value with your project's public Publishable key.
+    // Supabase Dashboard > Project Settings > API Keys
+    const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
 
-      <input id="authPassword" type="password"
-        placeholder="كلمة المرور"
-        autocomplete="current-password"
-        minlength="6" required>
+    let supabaseClient = null;
+    let currentUser = null;
+    let authMode = "login";
+    let language = "ar";
+    let isSubmitting = false;
 
-      <button class="btn primary" type="submit"
-        id="authSubmit">دخول</button>
-    </form>
+    const $ = (id) => document.getElementById(id);
 
-    <p class="auth-message" id="authMessage"
-      role="status" aria-live="polite"></p>
+    // 2. Study levels and branches
+    const sections = {
+      "1": [
+        { value: "general", ar: "جذع مشترك", fr: "Tronc commun" }
+      ],
+      "2": [
+        { value: "sciences", ar: "علوم", fr: "Sciences" },
+        { value: "letters", ar: "آداب", fr: "Lettres" },
+        { value: "economics", ar: "اقتصاد وخدمات", fr: "Économie et services" },
+        { value: "informatics", ar: "تكنولوجيا الإعلامية", fr: "Technologies de l'informatique" }
+      ],
+      "3": [
+        { value: "sciences", ar: "علوم تجريبية", fr: "Sciences expérimentales" },
+        { value: "math", ar: "رياضيات", fr: "Mathématiques" },
+        { value: "letters", ar: "آداب", fr: "Lettres" },
+        { value: "economics", ar: "اقتصاد وتصرف", fr: "Économie et gestion" },
+        { value: "technical", ar: "علوم تقنية", fr: "Sciences techniques" },
+        { value: "informatics", ar: "علوم الإعلامية", fr: "Sciences de l'informatique" },
+        { value: "sport", ar: "رياضة", fr: "Sport" }
+      ],
+      "4": [
+        { value: "sciences", ar: "علوم تجريبية", fr: "Sciences expérimentales" },
+        { value: "math", ar: "رياضيات", fr: "Mathématiques" },
+        { value: "letters", ar: "آداب", fr: "Lettres" },
+        { value: "economics", ar: "اقتصاد وتصرف", fr: "Économie et gestion" },
+        { value: "technical", ar: "علوم تقنية", fr: "Sciences techniques" },
+        { value: "informatics", ar: "علوم الإعلامية", fr: "Sciences de l'informatique" },
+        { value: "sport", ar: "رياضة", fr: "Sport" }
+      ]
+    };
 
-    <p style="text-align:center">
-      <a id="authSwitch" onclick="switchAuthMode()">
-        ليس لديك حساب؟ أنشئ حسابًا
-      </a>
-    </p>
-  </div>
-</div>
+    const translations = {
+      ar: {
+        login: "تسجيل الدخول",
+        signup: "إنشاء حساب",
+        logout: "تسجيل الخروج",
+        eyebrow: "✨ منصتك الدراسية التونسية",
+        heroLine1: "قرايتك تولّي أسهل",
+        heroLine2: "كي نتعلموا مع بعضنا",
+        heroDescription: "مرحبًا بيك في Study Group.tn، مساحة للتلامذة التوانسة باش ينظّموا قرايتهم ويحضّروا للنجاح خطوة بخطوة.",
+        startNow: "ابدأ توّا مجانًا ←",
+        chooseLevel: "اختار مستواك",
+        visual1Title: "أهداف واضحة",
+        visual1Desc: "قسّم قرايتك إلى خطوات صغيرة",
+        visual2Title: "تعلّم وتقدّم",
+        visual2Desc: "حضّر روحك لكل اختبار",
+        visual3Title: "نتعاونوا مع بعضنا",
+        visual3Desc: "النجاح أحلى كي نتقاسمو المعرفة",
+        featuresTitle: "علاش Study Group.tn؟",
+        featuresSubtitle: "فضاء دراسي منظّم، معمول على خاطر التلامذة",
+        feature1Title: "حسب مستواك",
+        feature1Desc: "اختار المستوى والشعبة متاعك بسهولة.",
+        feature2Title: "لغتان",
+        feature2Desc: "بدّل بين العربية والفرنسية وقت ما تحب.",
+        feature3Title: "حسابك الخاص",
+        feature3Desc: "سجّل دخولك عبر Supabase أو Google.",
+        studyTitle: "مسارك الدراسي",
+        studySubtitle: "اختار مستواك باش تشوف الشعب المتاحة",
+        levelLabel: "المستوى الدراسي",
+        branchLabel: "الشعبة",
+        studyNote: "اختيار المستوى والشعبة هنا لا ينشئ سجلًا في قاعدة البيانات. يلزمك تسجيل الدخول لحسابك.",
+        accountTitle: "مرحبًا بيك في حسابك! 🎉",
+        connectedAs: "متصل بالبريد:",
+        selectedLevel: "المستوى:",
+        selectedBranch: "الشعبة:",
+        saveSelection: "تأكيد اختياري",
+        footerText: "نتعلموا، نتعاونوا، وننجحوا مع بعضنا 🇹🇳",
+        nameLabel: "الاسم",
+        emailLabel: "البريد الإلكتروني",
+        passwordLabel: "كلمة المرور",
+        or: "أو",
+        googleLogin: "المتابعة باستخدام Google",
+        loginTitle: "مرحبًا بعودتك!",
+        loginSubtitle: "ادخل لحسابك وكمّل مسارك الدراسي",
+        signupTitle: "أنشئ حسابك",
+        signupSubtitle: "ابدأ رحلتك الدراسية مع Study Group.tn",
+        switchToSignup: "أنشئ حسابًا",
+        switchToLogin: "تسجيل الدخول",
+        noAccount: "ليس لديك حساب؟",
+        haveAccount: "عندك حساب بالفعل؟",
+        chooseLevelOption: "اختار المستوى",
+        levelName: "السنة",
+        invalidConfig: "يلزمك أولًا إضافة Publishable Key الصحيح من إعدادات Supabase.",
+        enterCredentials: "اكتب بريدك الإلكتروني وكلمة المرور.",
+        enterName: "اكتب اسمك من فضلك.",
+        passwordLength: "كلمة المرور لازمها تكون 6 أحرف على الأقل.",
+        loginSuccess: "تم تسجيل الدخول بنجاح.",
+        signupSuccess: "تم إنشاء الحساب. إذا كان تأكيد البريد مفعّلًا، افتح بريدك الإلكتروني لتأكيد الحساب قبل تسجيل الدخول.",
+        logoutSuccess: "تم تسجيل الخروج.",
+        googleError: "تعذّر بدء تسجيل الدخول عبر Google.",
+        genericError: "حدث خطأ. حاول مرة أخرى.",
+        signedIn: "أنت مسجّل الدخول بالفعل.",
+        selectionSaved: "تم تأكيد اختيارك لهذه الجلسة. لم يتم حفظه في قاعدة البيانات.",
+        sessionExpired: "انتهت الجلسة. سجّل الدخول مرة أخرى.",
+        authFailed: "تعذّر التحقق من حالة الحساب.",
+        networkError: "تعذّر الاتصال بالخدمة. تحقّق من الإنترنت وحاول مرة أخرى.",
+        levels: ["الأولى ثانوي", "الثانية ثانوي", "الثالثة ثانوي", "الرابعة ثانوي"]
+      },
+      fr: {
+        login: "Connexion",
+        signup: "Créer un compte",
+        logout: "Déconnexion",
+        eyebrow: "✨ Ta plateforme scolaire tunisienne",
+        heroLine1: "Les études deviennent plus faciles",
+        heroLine2: "quand on apprend ensemble",
+        heroDescription: "Bienvenue sur Study Group.tn, un espace pour aider les élèves tunisiens à organiser leurs études et à progresser étape par étape.",
+        startNow: "Commencer gratuitement ←",
+        chooseLevel: "Choisir mon niveau",
+        visual1Title: "Des objectifs clairs",
+        visual1Desc: "Divise tes révisions en petites étapes",
+        visual2Title: "Apprendre et progresser",
+        visual2Desc: "Prépare-toi à chaque contrôle",
+        visual3Title: "Entraide",
+        visual3Desc: "Le savoir se partage",
+        featuresTitle: "Pourquoi Study Group.tn ?",
+        featuresSubtitle: "Un espace d'étude pensé pour les élèves",
+        feature1Title: "Selon ton niveau",
+        feature1Desc: "Choisis facilement ton niveau et ta section.",
+        feature2Title: "Deux langues",
+        feature2Desc: "Passe de l'arabe au français quand tu veux.",
+        feature3Title: "Ton compte personnel",
+        feature3Desc: "Connecte-toi avec Supabase ou Google.",
+        studyTitle: "Ton parcours scolaire",
+        studySubtitle: "Choisis ton niveau pour voir les sections disponibles",
+        levelLabel: "Niveau scolaire",
+        branchLabel: "Section",
+        studyNote: "Le choix du niveau et de la section ici ne crée aucun enregistrement en base de données. Connecte-toi à ton compte.",
+        accountTitle: "Bienvenue dans ton compte ! 🎉",
+        connectedAs: "Connecté avec :",
+        selectedLevel: "Niveau :",
+        selectedBranch: "Section :",
+        saveSelection: "Confirmer mon choix",
+        footerText: "Apprenons, collaborons et réussissons ensemble 🇹🇳",
+        nameLabel: "Nom",
+        emailLabel: "Adresse e-mail",
+        passwordLabel: "Mot de passe",
+        or: "OU",
+        googleLogin: "Continuer avec Google",
+        loginTitle: "Bon retour !",
+        loginSubtitle: "Connecte-toi pour continuer ton parcours",
+        signupTitle: "Créer un compte",
+        signupSubtitle: "Commence ton parcours avec Study Group.tn",
+        switchToSignup: "Créer un compte",
+        switchToLogin: "Connexion",
+        noAccount: "Pas encore de compte ?",
+        haveAccount: "Tu as déjà un compte ?",
+        chooseLevelOption: "Choisir un niveau",
+        levelName: "Année",
+        invalidConfig: "Ajoute d'abord la bonne Publishable Key depuis les paramètres Supabase.",
+        enterCredentials: "Saisis ton adresse e-mail et ton mot de passe.",
+        enterName: "Saisis ton nom.",
+        passwordLength: "Le mot de passe doit contenir au moins 6 caractères.",
+        loginSuccess: "Connexion réussie.",
+        signupSuccess: "Compte créé. Si la confirmation par e-mail est activée, confirme ton adresse avant de te connecter.",
+        logoutSuccess: "Déconnexion réussie.",
+        googleError: "Impossible de démarrer la connexion Google.",
+        genericError: "Une erreur est survenue. Réessaie.",
+        signedIn: "Tu es déjà connecté.",
+        selectionSaved: "Choix confirmé pour cette session. Il n'a pas été enregistré dans la base de données.",
+        sessionExpired: "Session expirée. Connecte-toi à nouveau.",
+        authFailed: "Impossible de vérifier l'état du compte.",
+        networkError: "Connexion au service impossible. Vérifie ta connexion Internet.",
+        levels: ["1ère année secondaire", "2e année secondaire", "3e année secondaire", "4e année secondaire"]
+      }
+    };
 
-<script>
-let authMode = "login";
-
-function openAuth(mode = "login") {
-  authMode = mode;
-  document.getElementById("authOverlay")
-    .classList.add("open");
-  updateAuthUI();
-}
-
-function closeAuth() {
-  document.getElementById("authOverlay")
-    .classList.remove("open");
-}
-
-function switchAuthMode() {
-  authMode = authMode === "login" ? "signup" : "login";
-  updateAuthUI();
-}
-
-function updateAuthUI() {
-  const signup = authMode === "signup";
-  document.getElementById("authTitle").textContent =
-    signup ? "إنشاء حساب جديد" : "تسجيل الدخول";
-  document.getElementById("authSubmit").textContent =
-    signup ? "إنشاء الحساب" : "دخول";
-  document.getElementById("authSwitch").textContent =
-    signup ? "لديك حساب؟ سجّل الدخول"
-           : "ليس لديك حساب؟ أنشئ حسابًا";
-  document.getElementById("authMessage").textContent = "";
-  document.getElementById("authPassword").autocomplete =
-    signup ? "new-password" : "current-password";
-}
-
-document.getElementById("authForm")
-  .addEventListener("submit", async function(event) {
-    event.preventDefault();
-
-    const email = document.getElementById("authEmail").value.trim();
-    const password = document.getElementById("authPassword").value;
-    const message = document.getElementById("authMessage");
-    const submit = document.getElementById("authSubmit");
-
-    if (typeof supabaseClient === "undefined") {
-      message.textContent = "تعذر الاتصال بخدمة الحسابات.";
-      return;
+    function t(key) {
+      return translations[language][key] ?? translations.ar[key] ?? key;
     }
 
-    submit.disabled = true;
-    message.textContent = "يرجى الانتظار...";
+    function showStatus(element, message, type = "info") {
+      element.textContent = message;
+      element.className = "status visible " + type;
+    }
 
-    try {
-      if (authMode === "signup") {
-        const { data, error } = await supabaseClient.auth.signUp({
-          email,
-          password,
+    function clearStatus(element) {
+      element.textContent = "";
+      element.className = "status";
+    }
+
+    function getLevelName(level) {
+      return t("levels")[Number(level) - 1] || "";
+    }
+
+    function getBranchName(level, branchValue) {
+      const branch = (sections[level] || []).find(item => item.value === branchValue);
+      return branch ? branch[language] : "";
+    }
+
+    // 3. Populate branch list
+    function populateBranches(preserveValue = true) {
+      const level = $("levelSelect").value;
+      const select = $("branchSelect");
+      const oldValue = preserveValue ? select.value : "";
+      const list = sections[level] || [];
+
+      select.replaceChildren();
+
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = t("chooseLevelOption");
+      select.appendChild(placeholder);
+
+      list.forEach(branch => {
+        const option = document.createElement("option");
+        option.value = branch.value;
+        option.textContent = branch[language];
+        select.appendChild(option);
+      });
+
+      if (list.some(branch => branch.value === oldValue)) {
+        select.value = oldValue;
+      } else if (list.length) {
+        select.value = list[0].value;
+      }
+
+      updateAccountSelection();
+    }
+
+    function updateAccountSelection() {
+      if (!currentUser) return;
+
+      $("accountLevel").textContent = getLevelName($("levelSelect").value);
+      $("accountBranch").textContent = getBranchName(
+        $("levelSelect").value,
+        $("branchSelect").value
+      );
+    }
+
+    // 4. Language switching
+    function applyLanguage() {
+      document.documentElement.lang = language;
+      document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+      $("languageBtn").textContent = language === "ar" ? "FR" : "عربي";
+
+      document.querySelectorAll("[data-i18n]").forEach(element => {
+        const key = element.dataset.i18n;
+        if (translations[language][key] !== undefined) {
+          element.textContent = translations[language][key];
+        }
+      });
+
+      $("authTitle").textContent = authMode === "login" ? t("loginTitle") : t("signupTitle");
+      $("authSubtitle").textContent = authMode === "login" ? t("loginSubtitle") : t("signupSubtitle");
+      $("authSubmit").textContent = authMode === "login" ? t("login") : t("signup");
+      $("authSwitchText").textContent = authMode === "login" ? t("noAccount") : t("haveAccount");
+      $("authSwitch").textContent = authMode === "login" ? t("switchToSignup") : t("switchToLogin");
+
+      $("fullName").placeholder = language === "ar" ? "اسمك" : "Ton nom";
+      $("email").placeholder = "you@example.com";
+      $("password").placeholder = "••••••••";
+
+      document.querySelectorAll("#levelSelect option").forEach((option, index) => {
+        option.textContent = getLevelName(index + 1);
+      });
+
+      populateBranches(true);
+      updateAccountSelection();
+    }
+
+    // 5. Authentication modal
+    function openAuth(mode = "login") {
+      if (currentUser) {
+        showStatus($("mainStatus"), t("signedIn"), "info");
+        $("study").scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+
+      authMode = mode;
+      clearStatus($("authStatus"));
+      applyLanguage();
+
+      $("nameField").classList.toggle("hidden", mode !== "signup");
+      $("fullName").required = mode === "signup";
+      $("password").autocomplete = mode === "login" ? "current-password" : "new-password";
+
+      $("authOverlay").classList.add("open");
+      $("authOverlay").setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+
+      setTimeout(() => {
+        $(mode === "signup" ? "fullName" : "email").focus();
+      }, 50);
+    }
+
+    function closeAuth() {
+      $("authOverlay").classList.remove("open");
+      $("authOverlay").setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      clearStatus($("authStatus"));
+    }
+
+    // 6. Update interface based on authentication state
+    function renderAuthState(user) {
+      currentUser = user || null;
+
+      $("loginBtn").classList.toggle("hidden", !!currentUser);
+      $("signupBtn").classList.toggle("hidden", !!currentUser);
+      $("heroSignupBtn").classList.toggle("hidden", !!currentUser);
+      $("logoutBtn").classList.toggle("hidden", !currentUser);
+      $("accountPanel").classList.toggle("visible", !!currentUser);
+
+      if (currentUser) {
+        $("accountEmail").textContent = currentUser.email || "";
+        updateAccountSelection();
+        closeAuth();
+      } else {
+        $("accountEmail").textContent = "";
+      }
+    }
+
+    // 7. Check configuration and create Supabase client
+    function initializeSupabase() {
+      if (!window.supabase || !window.supabase.createClient) {
+        showStatus(
+          $("mainStatus"),
+          "تعذّر تحميل مكتبة Supabase. تحقّقي من اتصال الإنترنت.",
+          "error"
+        );
+        return;
+      }
+
+      if (
+        !SUPABASE_PUBLISHABLE_KEY ||
+        SUPABASE_PUBLISHABLE_KEY === "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE"
+      ) {
+        $("loginBtn").addEventListener("click", () => openAuth("login"));
+        $("signupBtn").addEventListener("click", () => openAuth("signup"));
+        $("heroSignupBtn").addEventListener("click", () => openAuth("signup"));
+
+        showStatus($("mainStatus"), t("invalidConfig"), "info");
+        return;
+      }
+
+      try {
+        supabaseClient = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_PUBLISHABLE_KEY,
+          {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true
+            }
+          }
+        );
+      } catch (error) {
+        console.error("Supabase initialization error:", error);
+        showStatus($("mainStatus"), t("genericError"), "error");
+        return;
+      }
+
+      $("loginBtn").addEventListener("click", () => openAuth("login"));
+      $("signupBtn").addEventListener("click", () => openAuth("signup"));
+      $("heroSignupBtn").addEventListener("click", () => openAuth("signup"));
+
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        renderAuthState(session?.user || null);
+      });
+
+      supabaseClient.auth.getSession().then(({ data, error }) => {
+        if (error) {
+          showStatus($("mainStatus"), t("authFailed"), "error");
+          return;
+        }
+        renderAuthState(data.session?.user || null);
+      }).catch(error => {
+        console.error(error);
+        showStatus($("mainStatus"), t("networkError"), "error");
+      });
+    }
+
+    // 8. Email sign up and login
+    $("authForm").addEventListener("submit", async event => {
+      event.preventDefault();
+
+      if (!supabaseClient) {
+        showStatus($("authStatus"), t("invalidConfig"), "error");
+        return;
+      }
+
+      if (isSubmitting) return;
+
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      const fullName = $("fullName").value.trim();
+
+      if (!email || !password) {
+        showStatus($("authStatus"), t("enterCredentials"), "error");
+        return;
+      }
+
+      if (authMode === "signup" && !fullName) {
+        showStatus($("authStatus"), t("enterName"), "error");
+        return;
+      }
+
+      if (password.length < 6) {
+        showStatus($("authStatus"), t("passwordLength"), "error");
+        return;
+      }
+
+      isSubmitting = true;
+      $("authSubmit").disabled = true;
+      $("authSubmit").textContent = "...";
+      clearStatus($("authStatus"));
+
+      try {
+        if (authMode === "signup") {
+          const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { full_name: fullName }
+            }
+          });
+
+          if (error) throw error;
+
+          if (data.session) {
+            renderAuthState(data.session.user);
+            showStatus($("mainStatus"), t("signupSuccess"), "success");
+            closeAuth();
+          } else {
+            showStatus($("authStatus"), t("signupSuccess"), "success");
+          }
+        } else {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (error) throw error;
+
+          renderAuthState(data.user);
+          showStatus($("mainStatus"), t("loginSuccess"), "success");
+          closeAuth();
+        }
+      } catch (error) {
+        console.error("Authentication error:", error);
+        showStatus(
+          $("authStatus"),
+          error.message || t("genericError"),
+          "error"
+        );
+      } finally {
+        isSubmitting = false;
+        $("authSubmit").disabled = false;
+        $("authSubmit").textContent = authMode === "login" ? t("login") : t("signup");
+      }
+    });
+
+    // 9. Google OAuth
+    $("googleBtn").addEventListener("click", async () => {
+      if (!supabaseClient) {
+        showStatus($("authStatus"), t("invalidConfig"), "error");
+        return;
+      }
+
+      $("googleBtn").disabled = true;
+      clearStatus($("authStatus"));
+
+      try {
+        const { error } = await supabaseClient.auth.signInWithOAuth({
+          provider: "google",
           options: {
-            emailRedirectTo: window.location.origin +
-              window.location.pathname
+            redirectTo: window.location.origin + window.location.pathname
           }
         });
 
         if (error) throw error;
-
-        message.textContent = data.session
-          ? "تم إنشاء الحساب وتسجيل الدخول بنجاح!"
-          : "إذا كان التسجيل متاحًا، تحققي من بريدك الإلكتروني لتأكيد الحساب.";
-      } else {
-        const { error } =
-          await supabaseClient.auth.signInWithPassword({
-            email,
-            password
-          });
-
-        if (error) throw error;
-
-        message.textContent = "تم تسجيل الدخول بنجاح!";
-        setTimeout(closeAuth, 1200);
+      } catch (error) {
+        console.error("Google OAuth error:", error);
+        showStatus($("authStatus"), error.message || t("googleError"), "error");
+        $("googleBtn").disabled = false;
       }
-    } catch (error) {
-      message.textContent = error.message ||
-        "حدث خطأ، حاولي مرة أخرى.";
-    } finally {
-      submit.disabled = false;
-    }
-  });
-
-document.querySelectorAll('button[onclick="comingSoon()"]')
-  .forEach(button => {
-    button.setAttribute(
-      "onclick",
-      button.dataset.i18n === "login"
-        ? "openAuth('login')"
-        : "openAuth('signup')"
-    );
-  });
-</script>
-  
-<style>
-.auth-overlay {
-  position: fixed;
-  inset: 0;
-  background: #000b;
-  z-index: 1000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.auth-overlay.open { display: flex; }
-.auth-box {
-  background: #121b37;
-  color: white;
-  border: 1px solid #7958ff;
-  border-radius: 20px;
-  padding: 25px;
-  width: 100%;
-  max-width: 440px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.auth-box h2 { text-align: center; }
-.auth-box label {
-  display: block;
-  margin-top: 12px;
-  margin-bottom: 5px;
-}
-.auth-box input,
-.auth-box select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #596485;
-  background: #080d20;
-  color: white;
-  font: inherit;
-}
-.auth-box select option {
-  background: #121b37;
-}
-.auth-box .submit-auth {
-  width: 100%;
-  margin-top: 20px;
-}
-.auth-close { float: left; }
-.auth-switch { text-align: center; }
-.auth-switch button {
-  border: 0;
-  background: none;
-  color: #b6aaff;
-  text-decoration: underline;
-}
-.password-wrap {
-  display: flex;
-  gap: 7px;
-  align-items: center;
-}
-.password-wrap input { flex: 1; min-width: 0; }
-.password-wrap button {
-  background: #202b4e;
-  color: white;
-  border: 1px solid #596485;
-  border-radius: 10px;
-  padding: 11px;
-}
-.auth-message {
-  text-align: center;
-  line-height: 1.8;
-  overflow-wrap: anywhere;
-}
-[hidden] { display: none !important; }
-</style>
-
-<div id="authOverlay" class="auth-overlay"
-     role="dialog" aria-modal="true"
-     aria-labelledby="authTitle">
-
-  <div class="auth-box">
-
-    <button class="btn auth-close"
-            type="button"
-            onclick="closeAuth()">✕</button>
-
-    <h2 id="authTitle">تسجيل الدخول</h2>
-
-    <form id="authForm">
-
-      <div id="signupFields" hidden>
-
-        <label for="studentName">الاسم</label>
-        <input id="studentName"
-               type="text"
-               maxlength="70"
-               autocomplete="name"
-               placeholder="اكتب اسمك">
-
-        <label for="schoolYear">السنة الدراسية</label>
-        <select id="schoolYear">
-          <option value="">اختر السنة الدراسية</option>
-          <option value="1">أولى ثانوي</option>
-          <option value="2">ثانية ثانوي</option>
-          <option value="3">ثالثة ثانوي</option>
-          <option value="4">رابعة ثانوي</option>
-        </select>
-
-        <label for="schoolSection">الشعبة</label>
-        <select id="schoolSection">
-          <option value="">اختر الشعبة</option>
-        </select>
-
-        <label for="optionalLanguage">
-          اللغة الاختيارية (إن وجدت)
-        </label>
-        <select id="optionalLanguage">
-          <option value="">لا توجد</option>
-          <option value="italian">الإيطالية</option>
-          <option value="spanish">الإسبانية</option>
-          <option value="german">الألمانية</option>
-          <option value="russian">الروسية</option>
-          <option value="chinese">الصينية</option>
-          <option value="other">لغة أخرى</option>
-        </select>
-
-      </div>
-
-      <label for="authEmail">البريد الإلكتروني</label>
-      <input id="authEmail"
-             type="email"
-             autocomplete="email"
-             required>
-
-      <label for="authPassword">كلمة المرور</label>
-
-      <div class="password-wrap">
-        <input id="authPassword"
-               type="password"
-               minlength="6"
-               autocomplete="current-password"
-               required>
-
-        <button type="button"
-                id="showPassword"
-                aria-label="إظهار كلمة المرور"
-                aria-pressed="false">👁</button>
-      </div>
-
-      <button class="btn primary submit-auth"
-              id="authSubmit"
-              type="submit">
-        دخول
-      </button>
-
-    </form>
-
-    <p id="authMessage"
-       class="auth-message"
-       role="status"
-       aria-live="polite"></p>
-
-    <p class="auth-switch">
-      <button id="authSwitch" type="button">
-        ليس لديك حساب؟ أنشئ حسابًا
-      </button>
-    </p>
-
-  </div>
-</div>
-
-<script>
-const sections = {
-  "1": [
-    ["general", "جذع مشترك"]
-  ],
-  "2": [
-    ["sciences", "علوم"],
-    ["letters", "آداب"],
-    ["economics", "اقتصاد وخدمات"],
-    ["informatics", "تكنولوجيا الإعلامية"]
-  ],
-  "3": [
-    ["sciences", "علوم تجريبية"],
-    ["math", "رياضيات"],
-    ["letters", "آداب"],
-    ["economics", "اقتصاد وتصرف"],
-    ["technical", "علوم تقنية"],
-    ["informatics", "علوم الإعلامية"],
-    ["sport", "رياضة"]
-  ],
-  "4": [
-    ["sciences", "علوم تجريبية"],
-    ["math", "رياضيات"],
-    ["letters", "آداب"],
-    ["economics", "اقتصاد وتصرف"],
-    ["technical", "علوم تقنية"],
-    ["informatics", "علوم الإعلامية"],
-    ["sport", "رياضة"]
-  ]
-};
-
-let authMode = "login";
-
-const authText = {
-  ar: {
-    login: "تسجيل الدخول",
-    signup: "إنشاء حساب",
-    enter: "دخول",
-    create: "إنشاء الحساب",
-    toSignup: "ليس لديك حساب؟ أنشئ حسابًا",
-    toLogin: "لديك حساب؟ سجّل الدخول",
-    wait: "يرجى الانتظار...",
-    confirm: "تحقق من بريدك الإلكتروني لتأكيد الحساب.",
-    success: "تم تسجيل الدخول بنجاح!",
-    missing: "أكمل الاسم والسنة الدراسية والشعبة.",
-    error: "حدث خطأ. حاول مجددًا."
-  },
-  fr: {
-    login: "Connexion",
-    signup: "Créer un compte",
-    enter: "Se connecter",
-    create: "Créer le compte",
-    toSignup: "Pas de compte ? Inscris-toi",
-    toLogin: "Déjà un compte ? Connecte-toi",
-    wait: "Veuillez patienter...",
-    confirm: "Vérifie ton e-mail pour confirmer ton compte.",
-    success: "Connexion réussie !",
-    missing: "Complète ton nom, ton niveau et ta section.",
-    error: "Une erreur est survenue."
-  }
-};
-
-function currentAuthLanguage() {
-  return document.documentElement.lang === "fr"
-    ? "fr" : "ar";
-}
-
-function updateSections() {
-  const year = document.getElementById("schoolYear").value;
-  const select = document.getElementById("schoolSection");
-
-  select.replaceChildren(
-    new Option("اختر الشعبة", "")
-  );
-
-  (sections[year] || []).forEach(item => {
-    select.add(new Option(item[1], item[0]));
-  });
-}
-
-document.getElementById("schoolYear")
-  .addEventListener("change", updateSections);
-
-function updateAuthUI() {
-  const signup = authMode === "signup";
-  const t = authText[currentAuthLanguage()];
-
-  document.getElementById("signupFields").hidden = !signup;
-
-  ["studentName", "schoolYear", "schoolSection"]
-    .forEach(id => {
-      document.getElementById(id).required = signup;
     });
 
-  document.getElementById("authTitle").textContent =
-    signup ? t.signup : t.login;
+    // 10. Logout
+    $("logoutBtn").addEventListener("click", async () => {
+      if (!supabaseClient) return;
 
-  document.getElementById("authSubmit").textContent =
-    signup ? t.create : t.enter;
+      $("logoutBtn").disabled = true;
 
-  document.getElementById("authSwitch").textContent =
-    signup ? t.toLogin : t.toSignup;
-
-  document.getElementById("authPassword").autocomplete =
-    signup ? "new-password" : "current-password";
-
-  document.getElementById("authMessage").textContent = "";
-}
-
-function openAuth(mode = "login") {
-  authMode = mode;
-  updateAuthUI();
-
-  document.getElementById("authOverlay")
-    .classList.add("open");
-}
-
-function closeAuth() {
-  document.getElementById("authOverlay")
-    .classList.remove("open");
-}
-
-document.getElementById("authSwitch")
-  .addEventListener("click", () => {
-    authMode = authMode === "login"
-      ? "signup" : "login";
-    updateAuthUI();
-  });
-
-document.getElementById("showPassword")
-  .addEventListener("click", () => {
-    const input = document.getElementById("authPassword");
-    const button = document.getElementById("showPassword");
-
-    const visible = input.type === "password";
-    input.type = visible ? "text" : "password";
-
-    button.setAttribute("aria-pressed", String(visible));
-    button.setAttribute(
-      "aria-label",
-      visible ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"
-    );
-  });
-
-document.getElementById("authOverlay")
-  .addEventListener("click", event => {
-    if (event.target.id === "authOverlay") closeAuth();
-  });
-
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closeAuth();
-});
-
-document.getElementById("authForm")
-  .addEventListener("submit", async event => {
-    event.preventDefault();
-
-    const t = authText[currentAuthLanguage()];
-    const message = document.getElementById("authMessage");
-    const submit = document.getElementById("authSubmit");
-
-    const email =
-      document.getElementById("authEmail").value.trim();
-
-    const password =
-      document.getElementById("authPassword").value;
-
-    const signup = authMode === "signup";
-
-    const name =
-      document.getElementById("studentName").value.trim();
-
-    const year =
-      document.getElementById("schoolYear").value;
-
-    const section =
-      document.getElementById("schoolSection").value;
-
-    const optionalLanguage =
-      document.getElementById("optionalLanguage").value;
-
-    if (signup && (!name || !year || !section)) {
-      message.textContent = t.missing;
-      return;
-    }
-
-    if (typeof supabaseClient === "undefined") {
-      message.textContent = "Supabase غير متصل.";
-      return;
-    }
-
-    submit.disabled = true;
-    message.textContent = t.wait;
-
-    try {
-      if (signup) {
-        const { data, error } =
-          await supabaseClient.auth.signUp({
-            email,
-            password,
-            options: {
-              emailRedirectTo:
-                location.origin + location.pathname,
-              data: {
-                student_name: name,
-                school_year: year,
-                school_section: section,
-                optional_language: optionalLanguage
-              }
-            }
-          });
-
+      try {
+        const { error } = await supabaseClient.auth.signOut();
         if (error) throw error;
 
-        message.textContent = data.session
-          ? t.success : t.confirm;
+        renderAuthState(null);
+        showStatus($("mainStatus"), t("logoutSuccess"), "success");
+      } catch (error) {
+        console.error("Logout error:", error);
+        showStatus($("mainStatus"), error.message || t("genericError"), "error");
+      } finally {
+        $("logoutBtn").disabled = false;
+      }
+    });
 
-      } else {
-        const { error } =
-          await supabaseClient.auth.signInWithPassword({
-            email,
-            password
-          });
+    // 11. Modal controls
+    $("authClose").addEventListener("click", closeAuth);
 
-        if (error) throw error;
+    $("authOverlay").addEventListener("click", event => {
+      if (event.target === $("authOverlay")) closeAuth();
+    });
 
-        message.textContent = t.success;
-        setTimeout(closeAuth, 1200);
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && $("authOverlay").classList.contains("open")) {
+        closeAuth();
+      }
+    });
+
+    $("authSwitch").addEventListener("click", () => {
+      openAuth(authMode === "login" ? "signup" : "login");
+    });
+
+    $("languageBtn").addEventListener("click", () => {
+      language = language === "ar" ? "fr" : "ar";
+      applyLanguage();
+      clearStatus($("mainStatus"));
+      clearStatus($("authStatus"));
+    });
+
+    // 12. Study selection
+    $("levelSelect").addEventListener("change", () => {
+      populateBranches(false);
+      updateAccountSelection();
+    });
+
+    $("branchSelect").addEventListener("change", updateAccountSelection);
+
+    $("saveSelectionBtn").addEventListener("click", () => {
+      if (!currentUser) {
+        openAuth("login");
+        return;
       }
 
-    } catch (error) {
-      message.textContent = error.message || t.error;
-    } finally {
-      submit.disabled = false;
-    }
-  });
+      showStatus($("mainStatus"), t("selectionSaved"), "success");
+    });
 
-/* ربط الأزرار القديمة بنافذة الحساب */
-document.querySelectorAll(
-  'button[onclick="comingSoon()"]'
-).forEach(button => {
-  const mode = button.dataset.i18n === "login"
-    ? "login" : "signup";
+    // 13. Start application
+    $("year").textContent = new Date().getFullYear();
 
-  button.setAttribute(
-    "onclick",
-    "openAuth('" + mode + "')"
-  );
-});
-</script>
+    populateBranches(false);
+    applyLanguage();
+    initializeSupabase();
+  </script>
 </body>
 </html>
