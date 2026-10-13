@@ -1355,15 +1355,51 @@
 
     $("branchSelect").addEventListener("change", updateAccountSelection);
 
-    $("saveSelectionBtn").addEventListener("click", () => {
-      if (!currentUser) {
-        openAuth("login");
-        return;
-      }
+  
+$("saveSelectionBtn").addEventListener("click", async () => {
+  if (!currentUser) {
+    openAuth("login");
+    return;
+  }
 
-      showStatus($("mainStatus"), t("selectionSaved"), "success");
-    });
+  const schoolYear = $("levelSelect").value;
+  const section = $("branchSelect").value;
+  const button = $("saveSelectionBtn");
 
+  if (!schoolYear || !section) {
+    showStatus($("mainStatus"), "اختاري السنة الدراسية والشعبة أولًا.", "error");
+    return;
+  }
+
+  button.disabled = true;
+
+  try {
+    const { error } = await supabaseClient
+      .from("student_profiles")
+      .upsert({
+        id: currentUser.id,
+        school_year: schoolYear,
+        section: section
+      }, { onConflict: "id" });
+
+    if (error) throw error;
+
+    showStatus(
+      $("mainStatus"),
+      "تم حفظ سنتك الدراسية وشعبتك بنجاح!",
+      "success"
+    );
+  } catch (error) {
+    console.error("Saving profile failed:", error);
+    showStatus(
+      $("mainStatus"),
+      "تعذّر حفظ الاختيار. تأكدي من إعدادات قاعدة البيانات.",
+      "error"
+    );
+  } finally {
+    button.disabled = false;
+  }
+});
     // 13. Start application
     $("year").textContent = new Date().getFullYear();
 
