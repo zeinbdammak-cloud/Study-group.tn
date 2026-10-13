@@ -546,5 +546,176 @@ if (localStorage.getItem("studyLanguage") === "fr") {
 
   console.log("Supabase initialized");
 </script>
+  
+<style>
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000b;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.auth-overlay.open { display: flex; }
+.auth-box {
+  background: #121b37;
+  color: white;
+  border: 1px solid #7958ff;
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.auth-box h2 { text-align: center; }
+.auth-box input {
+  width: 100%;
+  padding: 13px;
+  margin: 8px 0;
+  background: #080d20;
+  border: 1px solid #596485;
+  border-radius: 10px;
+  color: white;
+  font: inherit;
+}
+.auth-box button { margin-top: 10px; width: 100%; }
+.auth-box .close-auth {
+  width: auto;
+  float: left;
+}
+.auth-box a { color: #a99aff; cursor: pointer; }
+.auth-message { line-height: 1.8; text-align: center; }
+</style>
+
+<div id="authOverlay" class="auth-overlay">
+  <div class="auth-box">
+    <button class="btn close-auth" onclick="closeAuth()">✕</button>
+    <h2 id="authTitle">تسجيل الدخول</h2>
+
+    <form id="authForm">
+      <input id="authEmail" type="email"
+        placeholder="البريد الإلكتروني"
+        autocomplete="email" required>
+
+      <input id="authPassword" type="password"
+        placeholder="كلمة المرور"
+        autocomplete="current-password"
+        minlength="6" required>
+
+      <button class="btn primary" type="submit"
+        id="authSubmit">دخول</button>
+    </form>
+
+    <p class="auth-message" id="authMessage"
+      role="status" aria-live="polite"></p>
+
+    <p style="text-align:center">
+      <a id="authSwitch" onclick="switchAuthMode()">
+        ليس لديك حساب؟ أنشئ حسابًا
+      </a>
+    </p>
+  </div>
+</div>
+
+<script>
+let authMode = "login";
+
+function openAuth(mode = "login") {
+  authMode = mode;
+  document.getElementById("authOverlay")
+    .classList.add("open");
+  updateAuthUI();
+}
+
+function closeAuth() {
+  document.getElementById("authOverlay")
+    .classList.remove("open");
+}
+
+function switchAuthMode() {
+  authMode = authMode === "login" ? "signup" : "login";
+  updateAuthUI();
+}
+
+function updateAuthUI() {
+  const signup = authMode === "signup";
+  document.getElementById("authTitle").textContent =
+    signup ? "إنشاء حساب جديد" : "تسجيل الدخول";
+  document.getElementById("authSubmit").textContent =
+    signup ? "إنشاء الحساب" : "دخول";
+  document.getElementById("authSwitch").textContent =
+    signup ? "لديك حساب؟ سجّل الدخول"
+           : "ليس لديك حساب؟ أنشئ حسابًا";
+  document.getElementById("authMessage").textContent = "";
+  document.getElementById("authPassword").autocomplete =
+    signup ? "new-password" : "current-password";
+}
+
+document.getElementById("authForm")
+  .addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("authEmail").value.trim();
+    const password = document.getElementById("authPassword").value;
+    const message = document.getElementById("authMessage");
+    const submit = document.getElementById("authSubmit");
+
+    if (typeof supabaseClient === "undefined") {
+      message.textContent = "تعذر الاتصال بخدمة الحسابات.";
+      return;
+    }
+
+    submit.disabled = true;
+    message.textContent = "يرجى الانتظار...";
+
+    try {
+      if (authMode === "signup") {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: window.location.origin +
+              window.location.pathname
+          }
+        });
+
+        if (error) throw error;
+
+        message.textContent = data.session
+          ? "تم إنشاء الحساب وتسجيل الدخول بنجاح!"
+          : "إذا كان التسجيل متاحًا، تحققي من بريدك الإلكتروني لتأكيد الحساب.";
+      } else {
+        const { error } =
+          await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+          });
+
+        if (error) throw error;
+
+        message.textContent = "تم تسجيل الدخول بنجاح!";
+        setTimeout(closeAuth, 1200);
+      }
+    } catch (error) {
+      message.textContent = error.message ||
+        "حدث خطأ، حاولي مرة أخرى.";
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
+document.querySelectorAll('button[onclick="comingSoon()"]')
+  .forEach(button => {
+    button.setAttribute(
+      "onclick",
+      button.dataset.i18n === "login"
+        ? "openAuth('login')"
+        : "openAuth('signup')"
+    );
+  });
+</script>
 </body>
 </html>
