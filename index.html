@@ -1211,11 +1211,16 @@ async function loadStudentProfile(user) {
       branch.value = savedSection;
     }
 
-    $("optionSelect").value = data.optional_language || "";
+   
+updateOptionField();
 
-    updateOptionField();
-    updateAccountSelection();
+$("optionSelect").value = data.optional_language || "";
+
+updateAccountSelection();
+
+    
     $("studyControls").style.display = "none";
+    $("saveSelectionBtn").style.display = "none";
   } catch (error) {
     console.error("Loading profile failed:", error);
   }
