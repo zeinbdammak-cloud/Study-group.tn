@@ -745,8 +745,7 @@
      </select>
 </div>
         </div>
-        <p class="study-note" data-i18n="studyNote">
-          اختيار المستوى والشعبة هنا لا ينشئ سجلًا في قاعدة البيانات. يلزمك تسجيل الدخول لحسابك.
+        <p class="study-note" id="studyNote">اختاري مستواك الدراسي وشعبتك لإنشاء ملفك الدراسي.</p>
         </p>
 
         <div id="accountPanel" class="account-panel">
@@ -1187,8 +1186,15 @@ async function loadStudentProfile(user) {
       .maybeSingle();
 
     if (error) throw error;
-    if (!data || currentUser?.id !== user.id) return;
+   if (currentUser?.id !== user.id) return;
 
+if (!data) {
+  $("studyControls").style.display = "";
+  $("saveSelectionBtn").style.display = "";
+  $("studyNote").textContent =
+    "اختاري مستواك الدراسي وشعبتك لإنشاء ملفك الدراسي.";
+  return;
+}
     const levelMap = {
       "1ere": "1",
       "2eme": "2",
@@ -1221,6 +1227,7 @@ updateAccountSelection();
     
     $("studyControls").style.display = "none";
     $("saveSelectionBtn").style.display = "none";
+    $("studyNote").textContent = "تم حفظ مسارك الدراسي بنجاح. يمكنك الآن الاطلاع على الموارد الخاصة بمستواك وشعبتك.";
   } catch (error) {
     console.error("Loading profile failed:", error);
   }
@@ -1236,12 +1243,16 @@ updateAccountSelection();
       $("logoutBtn").classList.toggle("hidden", !currentUser);
       $("accountPanel").classList.toggle("visible", !!currentUser);
 
-      
 if (currentUser) {
   $("accountEmail").textContent = currentUser.email || "";
   updateAccountSelection();
   closeAuth();
   loadStudentProfile(currentUser);
+} else {
+  $("studyControls").style.display = "";
+  $("saveSelectionBtn").style.display = "";
+  $("studyNote").textContent =
+    "اختاري مستواك الدراسي وشعبتك لإنشاء ملفك الدراسي.";
 }
 
     }
