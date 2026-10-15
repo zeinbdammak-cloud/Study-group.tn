@@ -1421,7 +1421,17 @@ $("saveSelectionBtn").addEventListener("click", async () => {
     return;
   }
 
-const schoolYear = $("levelSelect").value;
+
+const selectedLevel = $("levelSelect").value;
+
+const schoolYearMap = {
+  "1": "1ere",
+  "2": "2eme",
+  "3": "3eme",
+  "4": "4eme"
+};
+
+const schoolYear = schoolYearMap[selectedLevel];
 const section = $("branchSelect").value;
 const optionalLanguage = $("optionSelect").value;
 const button = $("saveSelectionBtn");
