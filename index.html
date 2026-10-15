@@ -730,7 +730,21 @@
           <div class="field">
             <label for="branchSelect" data-i18n="branchLabel">الشعبة</label>
             <select id="branchSelect"></select>
-          </div>
+          
+<div class="field" id="optionField" style="display:none;">
+  <label for="optionSelect">المادة الاختيارية (Option)</label>
+  <select id="optionSelect">
+    <option value="">اختاري المادة الاختيارية</option>
+    <option value="spanish">الإسبانية</option>
+    <option value="italian">الإيطالية</option>
+    <option value="german">الألمانية</option>
+    <option value="chinese">الصينية</option>
+    <option value="art">التشكيلية</option>
+    <option value="music">الموسيقية</option>
+    <option value="turkish">التركية</option>
+  </select>
+</div>
+</div>
         </div>
 
         <p class="study-note" data-i18n="studyNote">
@@ -1014,6 +1028,21 @@
       return branch ? branch[language] : "";
     }
 
+function updateOptionField() {
+  const level = $("levelSelect").value;
+  const optionField = $("optionField");
+  const optionSelect = $("optionSelect");
+
+  const showOption = level === "3" || level === "4";
+
+  optionField.style.display = showOption ? "" : "none";
+  optionSelect.required = showOption;
+
+  if (!showOption) {
+    optionSelect.value = "";
+  }
+}
+
     // 3. Populate branch list
     function populateBranches(preserveValue = true) {
       const level = $("levelSelect").value;
@@ -1041,6 +1070,7 @@
         select.value = list[0].value;
       }
 
+         updateOptionField();
       updateAccountSelection();
     }
 
@@ -1362,9 +1392,22 @@ $("saveSelectionBtn").addEventListener("click", async () => {
     return;
   }
 
-  const schoolYear = $("levelSelect").value;
-  const section = $("branchSelect").value;
-  const button = $("saveSelectionBtn");
+const schoolYear = $("levelSelect").value;
+const section = $("branchSelect").value;
+const optionalLanguage = $("optionSelect").value;
+const button = $("saveSelectionBtn");
+
+if (
+  (schoolYear === "3" || schoolYear === "4") &&
+  !optionalLanguage
+) {
+  showStatus(
+    $("mainStatus"),
+    "اختاري المادة الاختيارية أولًا.",
+    "error"
+  );
+  return;
+}
 
   if (!schoolYear || !section) {
     showStatus($("mainStatus"), "اختاري السنة الدراسية والشعبة أولًا.", "error");
@@ -1383,7 +1426,8 @@ $("saveSelectionBtn").addEventListener("click", async () => {
     || currentUser.email?.split("@")[0]
     || "Student",
   school_year: schoolYear,
-  section: section
+  section: section,
+  optional_language: optionalLanguage || null
 }, { onConflict: "id" });
 
 
