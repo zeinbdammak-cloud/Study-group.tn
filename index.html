@@ -1488,7 +1488,7 @@ const optionalLanguage = $("optionSelect").value;
 const button = $("saveSelectionBtn");
 
 if (
-  (schoolYear === "3" || schoolYear === "4") &&
+  (selectedLevel === "3" || selectedLevel === "4") &&
   !optionalLanguage
 ) {
   showStatus(
@@ -1499,7 +1499,7 @@ if (
   return;
 }
 
-  if (!schoolYear || (schoolYear !== "1" && !section)) {
+if (!schoolYear || (selectedLevel !== "1" && !section)) {
   showStatus(
     $("mainStatus"),
     "اختاري السنة الدراسية والشعبة المطلوبة أولًا.",
