@@ -1459,7 +1459,7 @@ if (
     || currentUser.email?.split("@")[0]
     || "Student",
   school_year: schoolYear,
-  section: schoolYear === "1" ? null : section,
+section: section || "general",
   optional_language: optionalLanguage || null
 }, { onConflict: "id" });
 
