@@ -716,8 +716,8 @@
       </div>
 
       <div class="study-panel">
-        <div class="study-controls">
-          <div class="field">
+<div class="study-controls" id="studyControls">
+        <div class="field">
             <label for="levelSelect" data-i18n="levelLabel">المستوى الدراسي</label>
             <select id="levelSelect">
               <option value="1">الأولى ثانوي</option>
@@ -1215,7 +1215,7 @@ async function loadStudentProfile(user) {
 
     updateOptionField();
     updateAccountSelection();
-
+    $("studyControls").style.display = "none";
   } catch (error) {
     console.error("Loading profile failed:", error);
   }
@@ -1520,13 +1520,17 @@ section: section || "general",
 }, { onConflict: "id" });
 
 
-    if (error) throw error;
+   
+if (error) throw error;
 
-    showStatus(
-      $("mainStatus"),
-      "تم حفظ سنتك الدراسية وشعبتك بنجاح!",
-      "success"
-    );
+$("studyControls").style.display = "none";
+
+showStatus(
+  $("mainStatus"),
+  "تم حفظ سنتك الدراسية وشعبتك بنجاح!",
+  "success"
+);
+
   } catch (error) {
     console.error("Saving profile failed:", error);
     showStatus(
