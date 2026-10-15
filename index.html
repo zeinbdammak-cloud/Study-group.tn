@@ -726,7 +726,7 @@
               <option value="4">الرابعة ثانوي</option>
             </select>
           </div>
-<div class="field">
+<div class="field" id="branchField">
   <label for="branchSelect" data-i18n="branchLabel">الشعبة</label>
   <select id="branchSelect"></select>
 </div>
@@ -754,6 +754,10 @@
           <p><span data-i18n="connectedAs">متصل بالبريد:</span> <strong id="accountEmail" class="account-email"></strong></p>
           <p><span data-i18n="selectedLevel">المستوى:</span> <strong id="accountLevel"></strong></p>
           <p><span data-i18n="selectedBranch">الشعبة:</span> <strong id="accountBranch"></strong></p>
+          <p id="accountOptionRow" style="display:none;">
+  <span>المادة الاختيارية (Option):</span>
+  <strong id="accountOption"></strong>
+</p>
           <button id="saveSelectionBtn" class="btn btn-primary" type="button" data-i18n="saveSelection">تأكيد اختياري</button>
         </div>
 
@@ -1028,9 +1032,18 @@
 
 function updateOptionField() {
   const level = $("levelSelect").value;
+  const branchField = $("branchField");
+  const branchSelect = $("branchSelect");
   const optionField = $("optionField");
   const optionSelect = $("optionSelect");
 
+  // إظهار الشعبة للثانية والثالثة والرابعة فقط
+  const showBranch = level === "2" || level === "3" || level === "4";
+
+  branchField.style.display = showBranch ? "" : "none";
+  branchSelect.required = showBranch;
+
+  // إظهار Option للثالثة والرابعة فقط
   const showOption = level === "3" || level === "4";
 
   optionField.style.display = showOption ? "" : "none";
@@ -1040,7 +1053,6 @@ function updateOptionField() {
     optionSelect.value = "";
   }
 }
-
     // 3. Populate branch list
     function populateBranches(preserveValue = true) {
       const level = $("levelSelect").value;
@@ -1072,15 +1084,34 @@ function updateOptionField() {
       updateAccountSelection();
     }
 
-    function updateAccountSelection() {
-      if (!currentUser) return;
+   function updateAccountSelection() {
+  if (!currentUser) return;
 
-      $("accountLevel").textContent = getLevelName($("levelSelect").value);
-      $("accountBranch").textContent = getBranchName(
-        $("levelSelect").value,
-        $("branchSelect").value
-      );
-    }
+  const level = $("levelSelect").value;
+  const branch = $("branchSelect").value;
+  const optionSelect = $("optionSelect");
+  const optionRow = $("accountOptionRow");
+
+  $("accountLevel").textContent = getLevelName(level);
+
+const branchRow = $("accountBranch").closest("p");
+
+if (level === "1") {
+  branchRow.style.display = "none";
+  $("accountBranch").textContent = "";
+} else {
+  branchRow.style.display = "";
+  $("accountBranch").textContent = getBranchName(level, branch);
+}
+  const showOption = level === "3" || level === "4";
+
+  optionRow.style.display = showOption ? "" : "none";
+
+  if (showOption) {
+    $("accountOption").textContent =
+      optionSelect.selectedOptions[0]?.textContent || "";
+  }
+}
 
     // 4. Language switching
     function applyLanguage() {
@@ -1382,7 +1413,7 @@ function updateOptionField() {
     });
 
     $("branchSelect").addEventListener("change", updateAccountSelection);
-
+$("optionSelect").addEventListener("change", updateAccountSelection);
   
 $("saveSelectionBtn").addEventListener("click", async () => {
   if (!currentUser) {
@@ -1407,10 +1438,14 @@ if (
   return;
 }
 
-  if (!schoolYear || !section) {
-    showStatus($("mainStatus"), "اختاري السنة الدراسية والشعبة أولًا.", "error");
-    return;
-  }
+  if (!schoolYear || (schoolYear !== "1" && !section)) {
+  showStatus(
+    $("mainStatus"),
+    "اختاري السنة الدراسية والشعبة المطلوبة أولًا.",
+    "error"
+  );
+  return;
+}
 
   button.disabled = true;
 
@@ -1424,7 +1459,7 @@ if (
     || currentUser.email?.split("@")[0]
     || "Student",
   school_year: schoolYear,
-  section: section,
+  section: schoolYear === "1" ? null : section,
   optional_language: optionalLanguage || null
 }, { onConflict: "id" });
 
