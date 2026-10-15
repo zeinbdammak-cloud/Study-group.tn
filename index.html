@@ -1176,6 +1176,51 @@ if (level === "1") {
       clearStatus($("authStatus"));
     }
 
+async function loadStudentProfile(user) {
+  if (!user || !supabaseClient) return;
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("student_profiles")
+      .select("school_year, section, optional_language")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data || currentUser?.id !== user.id) return;
+
+    const levelMap = {
+      "1ere": "1",
+      "2eme": "2",
+      "3eme": "3",
+      "4eme": "4"
+    };
+
+    const level = levelMap[data.school_year];
+    if (!level) return;
+
+    $("levelSelect").value = level;
+    populateBranches(false);
+
+    const branch = $("branchSelect");
+    const savedSection = data.section || "general";
+
+    if ([...branch.options].some(
+      option => option.value === savedSection
+    )) {
+      branch.value = savedSection;
+    }
+
+    $("optionSelect").value = data.optional_language || "";
+
+    updateOptionField();
+    updateAccountSelection();
+
+  } catch (error) {
+    console.error("Loading profile failed:", error);
+  }
+}
+
     // 6. Update interface based on authentication state
     function renderAuthState(user) {
       currentUser = user || null;
@@ -1186,13 +1231,14 @@ if (level === "1") {
       $("logoutBtn").classList.toggle("hidden", !currentUser);
       $("accountPanel").classList.toggle("visible", !!currentUser);
 
-      if (currentUser) {
-        $("accountEmail").textContent = currentUser.email || "";
-        updateAccountSelection();
-        closeAuth();
-      } else {
-        $("accountEmail").textContent = "";
-      }
+      
+if (currentUser) {
+  $("accountEmail").textContent = currentUser.email || "";
+  updateAccountSelection();
+  closeAuth();
+  loadStudentProfile(currentUser);
+}
+
     }
 
     // 7. Check configuration and create Supabase client
