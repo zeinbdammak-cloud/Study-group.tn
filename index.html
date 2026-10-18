@@ -1078,36 +1078,76 @@
   <h3>📤 شارك موردًا دراسيًا</h3>
   <p>ساعد زملاءك بمشاركة درس أو ملخّص أو تمرين.</p>
 
-  <form id="uploadResourceForm">
-    <label for="resourceTitle">عنوان المورد</label>
-    <input id="resourceTitle" type="text" required maxlength="150"
-      placeholder="مثال: ملخّص درس الوراثة">
-<label for="resourceType">نوع المورد</label>
-<select id="resourceType" required>
-  <option value="">اختر نوع المورد</option>
-  <option value="summary">ملخّص</option>
-  <option value="lesson">درس</option>
-  <option value="exercise">تمرين</option>
-  <option value="other">مورد آخر</option>
-</select>
-    <label for="resourceSubject">المادة الدراسية</label>
-    <input id="resourceSubject" type="text" required
-      placeholder="مثال: علوم الحياة والأرض">
+  
+<form id="uploadResourceForm">
+  <label for="resourceTitle" data-i18n="resourceTitleLabel">
+    عنوان المورد
+  </label>
+  <input
+    id="resourceTitle"
+    type="text"
+    required
+    maxlength="150"
+    placeholder="مثال: ملخّص درس الوراثة"
+  >
 
-    <label for="resourceDescription">وصف المورد (اختياري)</label>
-    <textarea id="resourceDescription"
-      placeholder="اكتب وصفًا مختصرًا للمورد"></textarea>
+  <label for="resourceType" data-i18n="resourceTypeLabel">
+    نوع المورد
+  </label>
+  <select id="resourceType" required>
+    <option value="" data-i18n="resourceTypePlaceholder">
+      اختاري نوع المورد
+    </option>
+    <option value="summary" data-i18n="resourceSummary">
+      ملخّص
+    </option>
+    <option value="lesson" data-i18n="resourceLesson">
+      درس
+    </option>
+    <option value="exercise" data-i18n="resourceExercise">
+      تمرين
+    </option>
+    <option value="other" data-i18n="resourceOther">
+      مورد آخر
+    </option>
+  </select>
 
-    <label for="resourceFile">اختر الملف</label>
-    <input id="resourceFile" type="file"
-      accept=".pdf,.jpg,.jpeg,.png" required>
+  <label for="resourceSubject" data-i18n="resourceSubjectLabel">
+    المادة الدراسية
+  </label>
+  <select id="resourceSubject" required>
+    <option value="" data-i18n="resourcePlaceholder">
+      اختاري المادة الدراسية
+    </option>
+  </select>
 
-    <p>الأنواع المسموحة: PDF وJPG وPNG — الحجم الأقصى: 10 MB.</p>
+  <label for="resourceDescription" data-i18n="resourceDescriptionLabel">
+    وصف المورد (اختياري)
+  </label>
+  <textarea
+    id="resourceDescription"
+    placeholder="اكتب وصفًا مختصرًا للمورد"
+  ></textarea>
 
-    <button class="btn btn-primary" type="submit">
-      📤 نشر المورد
-    </button>
-  </form>
+  <label for="resourceFile" data-i18n="resourceFileLabel">
+    اختاري الملف
+  </label>
+  <input
+    id="resourceFile"
+    type="file"
+    accept=".pdf,.jpg,.jpeg,.png"
+    required
+  >
+
+  <p>
+    الأنواع المسموحة: PDF وJPG وPNG — الحجم الأقصى: 10 MB.
+  </p>
+
+  <button class="btn btn-primary" type="submit" data-i18n="resourcePublish">
+    📤 نشر المورد
+  </button>
+</form>
+
 
   <p id="uploadResourceStatus" role="status"></p>
 </div>
@@ -1454,7 +1494,52 @@
         }
       ]
     };
+    // Subjects for 1st year secondary — Tronc commun
+    const subjectsByTrack = {
+      "1:general": [
+        { value: "arabic", ar: "العربية", fr: "Arabe" },
+        { value: "french", ar: "الفرنسية", fr: "Français" },
+        { value: "english", ar: "الإنجليزية", fr: "Anglais" },
+        { value: "math", ar: "الرياضيات", fr: "Mathématiques" },
+        { value: "physics", ar: "العلوم الفيزيائية", fr: "Sciences physiques" },
+        { value: "svt", ar: "علوم الحياة والأرض", fr: "Sciences de la vie et de la Terre (SVT)" },
+        { value: "informatics", ar: "الإعلامية", fr: "Informatique" },
+        { value: "history_geography", ar: "التاريخ والجغرافيا", fr: "Histoire-géographie" },
+        { value: "islamic_thought", ar: "التفكير الإسلامي", fr: "Pensée islamique" },
+        { value: "civics", ar: "التربية المدنية", fr: "Éducation civique" },
+        { value: "technology", ar: "التربية التكنولوجية", fr: "Éducation technologique" }
+      ]
+    };
+    // Populate the subject dropdown according to the student's track
+function populateResourceSubjects() {
+  const subjectSelect = $("resourceSubject");
+  if (!subjectSelect) return;
 
+  const level = $("levelSelect").value;
+  const section = $("branchSelect").value;
+  const trackKey = `${level}:${section}`;
+  const subjects = subjectsByTrack[trackKey] || [];
+
+  subjectSelect.replaceChildren();
+
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent =
+    language === "ar"
+      ? "اختاري المادة الدراسية"
+      : "Choisis une matière";
+  subjectSelect.appendChild(placeholder);
+
+  for (const subject of subjects) {
+    const option = document.createElement("option");
+    option.value = subject.value;
+    option.textContent = subject[language];
+    subjectSelect.appendChild(option);
+  }
+}
+
+$("levelSelect").addEventListener("change", populateResourceSubjects);
+$("branchSelect").addEventListener("change", populateResourceSubjects);
     // 3. Arabic and French translations
 
     const translations = {
@@ -1582,7 +1667,21 @@
 
         profileSaved:
           "تم حفظ مسارك الدراسي بنجاح!",
-
+        resourceSubjectLabel: "المادة الدراسية",
+        resourceTypeLabel: "نوع المورد",
+        resourceTitleLabel: "عنوان المورد",
+        resourceDescriptionLabel: "وصف المورد (اختياري)",
+        resourceFileLabel: "اختاري الملف",
+        resourcePlaceholder: "اختاري المادة الدراسية",
+        resourceTypePlaceholder: "اختاري نوع المورد",
+        resourceSummary: "ملخّص",
+        resourceLesson: "درس",
+        resourceExercise: "تمرين",
+        resourceOther: "مورد آخر",
+        resourcePublish: "📤 نشر المورد",
+        resourceCategoriesTitle: "الموارد حسب النوع",
+        resourceBackSubjects: "العودة إلى المواد",
+        resourceBackCategories: "العودة إلى أنواع الموارد",
         levels: [
           "الأولى ثانوي",
           "الثانية ثانوي",
@@ -1717,7 +1816,21 @@
 
         profileSaved:
           "Ton parcours scolaire a été enregistré !",
-
+        resourceSubjectLabel: "Matière scolaire",
+        resourceTypeLabel: "Type de ressource",
+        resourceTitleLabel: "Titre de la ressource",
+        resourceDescriptionLabel: "Description de la ressource (facultatif)",
+        resourceFileLabel: "Choisir un fichier",
+        resourcePlaceholder: "Choisir une matière",
+        resourceTypePlaceholder: "Choisir un type de ressource",
+        resourceSummary: "Résumés",
+        resourceLesson: "Cours",
+        resourceExercise: "Exercices",
+        resourceOther: "Autres ressources",
+        resourcePublish: "📤 Publier la ressource",
+        resourceCategoriesTitle: "Ressources par catégorie",
+        resourceBackSubjects: "Retour aux matières",
+        resourceBackCategories: "Retour aux catégories",
         levels: [
           "1ère année secondaire",
           "2e année secondaire",
@@ -1948,10 +2061,12 @@ function applyLanguage() {
       } else if (profileReady) {
         $("studyNote").textContent =
           t("profileSaved");
-      } else {
+       } else {
         $("studyNote").textContent =
           t("profileRequired");
       }
+
+      populateResourceSubjects();
     }
 
     // 9. Status messages
@@ -2355,9 +2470,9 @@ clearStatus($("mainStatus"));
       }
     }
 
+    
     // Load resources for the student's saved school track
     async function loadResources(schoolYear, section) {
-      const resourcesSection = $("resourcesSection");
       const resourcesList = $("resourcesList");
       const resourcesTrack = $("resourcesTrack");
 
@@ -2368,135 +2483,280 @@ clearStatus($("mainStatus"));
           ? "الموارد الخاصة بمسارك الدراسي"
           : "Ressources de ton parcours scolaire";
 
-      const loadingMessage = document.createElement("p");
-      loadingMessage.textContent =
+      const loading = document.createElement("p");
+      loading.textContent =
         language === "ar"
           ? "جارٍ تحميل الموارد..."
           : "Chargement des ressources...";
-      resourcesList.appendChild(loadingMessage);
+      resourcesList.appendChild(loading);
 
       try {
         const { data, error } = await supabaseClient
           .from("resources")
-          .select(
-            "id, title, description, subject, resource_type, file_path"
-          )
+          .select("id, title, description, subject, resource_type, file_path")
           .eq("school_year", schoolYear)
           .eq("section", section)
           .eq("status", "approved")
           .order("title", { ascending: true });
 
         if (error) throw error;
-
         if (!currentUser) return;
 
-        resourcesList.replaceChildren();
+        const resources = data || [];
+        const levelNumber = {
+          "1ere": "1",
+          "2eme": "2",
+          "3eme": "3",
+          "4eme": "4"
+        }[schoolYear];
 
-        if (!data || data.length === 0) {
-          const emptyMessage = document.createElement("p");
-          emptyMessage.textContent =
-            language === "ar"
-              ? "ما فماش موارد متاحة لمسارك حاليًا. تفقد القسم لاحقًا!"
-              : "Aucune ressource disponible pour le moment.";
-          resourcesList.appendChild(emptyMessage);
-          return;
-        }
+        const trackKey = `${levelNumber}:${section}`;
+        const configuredSubjects = subjectsByTrack[trackKey] || [];
 
-        for (const resource of data) {
-          const card = document.createElement("article");
-          card.className = "resource-card";
+        const subjectMap = new Map();
 
-          const title = document.createElement("h3");
-          title.textContent = resource.title || "مورد دراسي";
-          card.appendChild(title);
+        configuredSubjects.forEach(subject => {
+          subjectMap.set(subject.value, subject);
+        });
 
-          if (resource.subject) {
-            const subject = document.createElement("p");
-            subject.textContent =
-              (language === "ar" ? "المادة: " : "Matière : ") +
-              resource.subject;
-            card.appendChild(subject);
+        // Also include subjects already used by saved resources.
+        resources.forEach(resource => {
+          if (
+            resource.subject &&
+            !subjectMap.has(resource.subject)
+          ) {
+            subjectMap.set(resource.subject, {
+              value: resource.subject,
+              ar: resource.subject,
+              fr: resource.subject
+            });
+          }
+        });
+
+        const text = {
+          empty: language === "ar"
+            ? "ما فماش موارد متاحة لمسارك حاليًا."
+            : "Aucune ressource disponible pour ton parcours.",
+          subjects: language === "ar"
+            ? "اختاري المادة الدراسية"
+            : "Choisis une matière",
+          categories: language === "ar"
+            ? "اختاري نوع المورد"
+            : "Choisis une catégorie",
+          backSubjects: language === "ar"
+            ? "← العودة إلى المواد"
+            : "← Retour aux matières",
+          backCategories: language === "ar"
+            ? "← العودة إلى أنواع الموارد"
+            : "← Retour aux catégories",
+          noResources: language === "ar"
+            ? "لا توجد موارد في هذا القسم حاليًا."
+            : "Aucune ressource dans cette catégorie.",
+          subject: language === "ar" ? "المادة: " : "Matière : ",
+          open: language === "ar"
+            ? "فتح المورد 📄"
+            : "Ouvrir la ressource 📄",
+          report: language === "ar"
+            ? "🚩 الإبلاغ عن ملف"
+            : "🚩 Signaler le fichier",
+          types: {
+            summary: language === "ar" ? "ملخّصات" : "Résumés",
+            lesson: language === "ar" ? "دروس" : "Cours",
+            exercise: language === "ar" ? "تمارين" : "Exercices",
+            other: language === "ar" ? "موارد أخرى" : "Autres ressources"
+          }
+        };
+
+        const addButton = (label, onClick) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "btn";
+          button.textContent = label;
+          button.addEventListener("click", onClick);
+          resourcesList.appendChild(button);
+          return button;
+        };
+
+        const renderSubjects = () => {
+          resourcesList.replaceChildren();
+
+          const heading = document.createElement("h3");
+          heading.textContent = text.subjects;
+          resourcesList.appendChild(heading);
+
+          if (subjectMap.size === 0) {
+            const message = document.createElement("p");
+            message.textContent = text.empty;
+            resourcesList.appendChild(message);
+            return;
           }
 
-          if (resource.description) {
-            const description = document.createElement("p");
-            description.textContent = resource.description;
-            card.appendChild(description);
+          for (const subject of subjectMap.values()) {
+            addButton(subject[language] || subject.value, () => {
+              renderCategories(subject.value);
+            });
+          }
+        };
+
+        const renderCategories = (subjectValue) => {
+          resourcesList.replaceChildren();
+
+          addButton(text.backSubjects, renderSubjects);
+
+          const subjectInfo = subjectMap.get(subjectValue);
+          const heading = document.createElement("h3");
+          heading.textContent = subjectInfo
+            ? subjectInfo[language] || subjectValue
+            : subjectValue;
+          resourcesList.appendChild(heading);
+
+          const categoryHeading = document.createElement("p");
+          categoryHeading.textContent = text.categories;
+          resourcesList.appendChild(categoryHeading);
+
+          for (const [type, label] of Object.entries(text.types)) {
+            addButton(label, () => {
+              renderFiles(subjectValue, type);
+            });
+          }
+        };
+
+        const renderFiles = async (subjectValue, type) => {
+          resourcesList.replaceChildren();
+          addButton(text.backCategories, () => {
+            renderCategories(subjectValue);
+          });
+
+          const heading = document.createElement("h3");
+          heading.textContent = text.types[type];
+          resourcesList.appendChild(heading);
+
+          const matching = resources.filter(resource =>
+            resource.subject === subjectValue &&
+            resource.resource_type === type
+          );
+
+          if (matching.length === 0) {
+            const message = document.createElement("p");
+            message.textContent = text.noResources;
+            resourcesList.appendChild(message);
+            return;
           }
 
-          if (resource.file_path) {
-            const { data: fileData, error: fileError } =
-              await supabaseClient.storage
-                .from("study-files")
-                .createSignedUrl(resource.file_path, 3600);
+          for (const resource of matching) {
+            if (!currentUser) return;
 
-            if (!fileError && fileData?.signedUrl) {
-              const link = document.createElement("a");
-              link.href = fileData.signedUrl;
-              link.target = "_blank";
-              link.rel = "noopener noreferrer";
-              link.textContent =
-                language === "ar"
-                  ? "فتح المورد 📄"
-                  : "Ouvrir la ressource 📄";
-              card.appendChild(link);
+            const card = document.createElement("article");
+            card.className = "resource-card";
+
+            const title = document.createElement("h3");
+            title.textContent = resource.title || "Study resource";
+            card.appendChild(title);
+
+            if (resource.description) {
+              const description = document.createElement("p");
+              description.textContent = resource.description;
+              card.appendChild(description);
             }
+
+            const subjectLabel = document.createElement("p");
+            const subjectInfo = subjectMap.get(resource.subject);
+            subjectLabel.textContent =
+              text.subject +
+              (subjectInfo
+                ? subjectInfo[language] || resource.subject
+                : resource.subject);
+            card.appendChild(subjectLabel);
+
+            if (resource.file_path) {
+              const { data: fileData, error: fileError } =
+                await supabaseClient.storage
+                  .from("study-files")
+                  .createSignedUrl(resource.file_path, 3600);
+
+              if (!fileError && fileData?.signedUrl) {
+                const link = document.createElement("a");
+                link.href = fileData.signedUrl;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.textContent = text.open;
+                card.appendChild(link);
+              }
+            }
+
+            const reportBtn = document.createElement("button");
+            reportBtn.type = "button";
+            reportBtn.className = "btn";
+            reportBtn.textContent = text.report;
+
+            reportBtn.addEventListener("click", async () => {
+              if (!currentUser) return;
+
+              const reason = prompt(
+                language === "ar"
+                  ? "علاش تحب تبلّغ عن الملف؟ اكتب السبب (5 أحرف على الأقل):"
+                  : "Pourquoi signaler ce fichier ? (5 caractères minimum)"
+              );
+
+              if (reason === null) return;
+
+              const trimmedReason = reason.trim();
+
+              if (trimmedReason.length < 5) {
+                alert(
+                  language === "ar"
+                    ? "اكتب سببًا واضحًا للإبلاغ (5 أحرف على الأقل)."
+                    : "Saisis un motif d'au moins 5 caractères."
+                );
+                return;
+              }
+
+              reportBtn.disabled = true;
+
+              try {
+                const { error: reportError } = await supabaseClient
+                  .from("resource_reports")
+                  .insert({
+                    resource_id: resource.id,
+                    reported_by: currentUser.id,
+                    reason: trimmedReason
+                  });
+
+                if (reportError) {
+                  if (reportError.code === "23505") {
+                    alert(
+                      language === "ar"
+                        ? "سبق لك الإبلاغ عن هذا الملف."
+                        : "Tu as déjà signalé ce fichier."
+                    );
+                    return;
+                  }
+                  throw reportError;
+                }
+
+                alert(
+                  language === "ar"
+                    ? "تم إرسال البلاغ بنجاح. شكرًا لمساعدتك!"
+                    : "Signalement envoyé. Merci !"
+                );
+              } catch (reportError) {
+                console.error("Report failed:", reportError);
+                alert(
+                  language === "ar"
+                    ? "تعذّر إرسال البلاغ. حاول مجددًا."
+                    : "Impossible d'envoyer le signalement."
+                );
+              } finally {
+                reportBtn.disabled = false;
+              }
+            });
+
+            card.appendChild(reportBtn);
+            resourcesList.appendChild(card);
           }
-const reportBtn = document.createElement("button");
-reportBtn.type = "button";
-reportBtn.className = "btn";
-reportBtn.textContent =
-  language === "ar" ? "🚩 الإبلاغ عن ملف" : "🚩 Signaler";
+        };
 
-reportBtn.addEventListener("click", async () => {
-  if (!currentUser) return;
-
-  const reason = prompt(
-    language === "ar"
-      ? "علاش تحب تبلّغ عن الملف؟ اكتب السبب (5 أحرف على الأقل):"
-      : "Pourquoi signaler ce fichier ? (5 caractères minimum)"
-  );
-
-  if (reason === null) return;
-
-  const trimmedReason = reason.trim();
-
-  if (trimmedReason.length < 5) {
-    alert("الرجاء كتابة سبب واضح للإبلاغ (5 أحرف على الأقل).");
-    return;
-  }
-
-  reportBtn.disabled = true;
-
-  try {
-    const { error } = await supabaseClient
-      .from("resource_reports")
-      .insert({
-        resource_id: resource.id,
-        reported_by: currentUser.id,
-        reason: trimmedReason
-      });
-
-    if (error) {
-      if (error.code === "23505") {
-        alert("سبق لك الإبلاغ عن هذا الملف.");
-        return;
-      }
-      throw error;
-    }
-
-    alert("تم إرسال البلاغ بنجاح. شكرًا لمساعدتك!");
-  } catch (error) {
-    console.error("Report failed:", error);
-    alert("تعذّر إرسال البلاغ. حاول مجددًا.");
-  } finally {
-    reportBtn.disabled = false;
-  }
-});
-
-card.appendChild(reportBtn);
-          resourcesList.appendChild(card);
-        }
+        renderSubjects();
       } catch (error) {
         console.error("Loading resources failed:", error);
 
@@ -2504,12 +2764,12 @@ card.appendChild(reportBtn);
 
         resourcesList.replaceChildren();
 
-        const errorMessage = document.createElement("p");
-        errorMessage.textContent =
+        const message = document.createElement("p");
+        message.textContent =
           language === "ar"
             ? "تعذّر تحميل الموارد. حاولي مجددًا لاحقًا."
             : "Impossible de charger les ressources.";
-        resourcesList.appendChild(errorMessage);
+        resourcesList.appendChild(message);
       }
     }
 
@@ -3230,9 +3490,7 @@ $("accountLogoutBtn").addEventListener("click", async () => {
     const savedLanguage =
       localStorage.getItem("studyLanguage");
 
-    language = savedLanguage === "fr"
-      ? "fr"
-      : "ar";
+    language = savedLanguage === "ar" ? "ar" : "fr";
 
     populateBranches(false);
 
