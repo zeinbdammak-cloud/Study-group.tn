@@ -1965,6 +1965,7 @@ $("authOverlay").addEventListener("click", event => {
 
   // 18. إنشاء حساب أو تسجيل الدخول بالبريد الإلكتروني
   $("authForm").addEventListener("submit", async event => {
+    console.log("AUTH FORM SUBMITTED");
     event.preventDefault();
     clearMessage("authMessage");
 
