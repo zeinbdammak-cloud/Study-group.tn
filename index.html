@@ -783,6 +783,9 @@
       </a>
 
       <div class="nav-actions">
+        <button id="resourcesBtn" class="btn" type="button">
+  📚 الموارد الدراسية
+</button>
         <button id="languageBtn" class="btn" type="button">FR</button>
         
 <div id="userAccountMenu" class="hidden">
@@ -1062,6 +1065,9 @@
 
 <!-- Study Resources -->
 <section id="resourcesSection" class="container section hidden">
+  <button id="resourcesBackBtn" class="btn" type="button">
+  ← الرجوع إلى الصفحة الرئيسية
+</button>
   <div class="section-heading">
     <h2>📚 الموارد الدراسية</h2>
     <p>الدروس والملخّصات والتمارين الخاصة بمسارك الدراسي</p>
@@ -1941,6 +1947,8 @@ function showGuestState() {
   profileReady = false;
 
   $("profilePage").classList.add("hidden");
+  $("resourcesSection").classList.add("hidden");
+
   $("home").classList.remove("hidden");
   $("features").classList.remove("hidden");
   $("study").classList.remove("hidden");
@@ -2316,7 +2324,6 @@ clearStatus($("mainStatus"));
       const resourcesList = $("resourcesList");
       const resourcesTrack = $("resourcesTrack");
 
-      resourcesSection.classList.remove("hidden");
       resourcesList.replaceChildren();
 
       resourcesTrack.textContent =
@@ -2515,7 +2522,35 @@ document.addEventListener("click", event => {
   }
 });
 
+$("resourcesBtn").addEventListener("click", async () => {
+  if (!currentUser) {
+    alert("يجب تسجيل الدخول أولًا لعرض الموارد الدراسية.");
+    return;
+  }
 
+  if (!profileReady) {
+    alert("يجب اختيار مسارك الدراسي وحفظه أولًا.");
+    return;
+  }
+
+  $("home").classList.add("hidden");
+  $("features").classList.add("hidden");
+  $("study").classList.add("hidden");
+  $("profilePage").classList.add("hidden");
+
+  $("resourcesSection").classList.remove("hidden");
+  await loadResources(
+  $("levelSelect").value.replace(/^([1-4])$/, (_, n) =>
+    ({ "1": "1ere", "2": "2eme", "3": "3eme", "4": "4eme" })[n]
+  ),
+  $("branchSelect").value
+);
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
 $("myAccountBtn").addEventListener("click", () => {
   $("userAccountDropdown").classList.add("hidden");
   $("userAccountBtn").setAttribute("aria-expanded", "false");
@@ -2523,6 +2558,7 @@ $("myAccountBtn").addEventListener("click", () => {
   $("home").classList.add("hidden");
   $("features").classList.add("hidden");
   $("study").classList.add("hidden");
+  $("resourcesSection").classList.add("hidden");
   $("profilePage").classList.remove("hidden");
 
   window.scrollTo({
@@ -2530,12 +2566,34 @@ $("myAccountBtn").addEventListener("click", () => {
     behavior: "smooth"
   });
 });
-
-$("profileBackBtn").addEventListener("click", () => {
+$("resourcesBackBtn").addEventListener("click", () => {
+  $("resourcesSection").classList.add("hidden");
   $("profilePage").classList.add("hidden");
+
   $("home").classList.remove("hidden");
   $("features").classList.remove("hidden");
-  $("study").classList.remove("hidden");
+
+  if (!profileReady && currentUser) {
+    $("study").classList.remove("hidden");
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+$("profileBackBtn").addEventListener("click", () => {
+  $("profilePage").classList.add("hidden");
+  $("resourcesSection").classList.add("hidden");
+
+  $("home").classList.remove("hidden");
+  $("features").classList.remove("hidden");
+
+  if (currentUser && !profileReady) {
+    $("study").classList.remove("hidden");
+  } else {
+    $("study").classList.add("hidden");
+  }
 
   $("home").scrollIntoView({
     behavior: "smooth",
