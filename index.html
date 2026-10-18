@@ -661,6 +661,95 @@
   font-weight: bold;
 }
 
+/* User account menu */
+#userAccountMenu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+#userAccountMenu.hidden,
+#userAccountDropdown.hidden {
+  display: none !important;
+}
+
+#userAccountBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #e5defe;
+  color: #35245f;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#userAvatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #eee8ff;
+  font-size: 19px;
+}
+
+#userAccountDropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 1000;
+  min-width: 190px;
+  padding: 8px;
+  background: white;
+  border: 1px solid #e9e2fa;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(40, 20, 80, 0.15);
+}
+
+#userAccountDropdown button {
+  display: block;
+  width: 100%;
+  padding: 11px 12px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: #35245f;
+  text-align: right;
+  font: inherit;
+  cursor: pointer;
+}
+
+#userAccountDropdown button:hover {
+  background: #f3efff;
+}
+
+#userAccountDropdown #accountLogoutBtn {
+  color: #c0395b;
+}
+
+@media (max-width: 480px) {
+  #userAccountBtn {
+    gap: 5px;
+    padding: 6px 8px;
+  }
+
+  #userAccountName {
+    max-width: 85px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #userAccountDropdown {
+    right: auto;
+    left: 0;
+  }
+}
+
   </style>
 </head>
 
@@ -714,6 +803,22 @@
 
       <div class="nav-actions">
         <button id="languageBtn" class="btn" type="button">FR</button>
+        
+<div id="userAccountMenu" class="hidden">
+  <button id="userAccountBtn" class="btn" type="button"
+    aria-expanded="false" aria-controls="userAccountDropdown">
+    <span id="userAvatar" aria-hidden="true">👤</span>
+    <span id="userAccountName">حسابي</span>
+    <span aria-hidden="true">⌄</span>
+  </button>
+
+  <div id="userAccountDropdown" class="hidden">
+    <button id="myAccountBtn" type="button">حسابي</button>
+    <button id="myStudyPathBtn" type="button">مساري الدراسي</button>
+    <button id="accountLogoutBtn" type="button">تسجيل الخروج</button>
+  </div>
+</div>
+
 
         <button id="loginBtn" class="btn" type="button"
           data-i18n="login">
@@ -2102,6 +2207,34 @@ function applyLanguage() {
       currentUser = user || null;
 
       const loggedIn = Boolean(currentUser);
+      
+$("userAccountMenu").classList.toggle(
+  "hidden",
+  !loggedIn
+);
+
+const accountName =
+  currentUser?.user_metadata?.full_name?.trim() ||
+  currentUser?.user_metadata?.name?.trim() ||
+  currentUser?.email?.split("@")[0] ||
+  "حسابي";
+
+$("userAccountName").textContent = accountName;
+
+const avatarUrl =
+  currentUser?.user_metadata?.avatar_url ||
+  currentUser?.user_metadata?.picture;
+
+$("userAvatar").textContent = "👤";
+$("userAvatar").style.backgroundImage = "none";
+
+if (avatarUrl) {
+  $("userAvatar").textContent = "";
+  $("userAvatar").style.backgroundImage =
+    `url("${avatarUrl}")`;
+  $("userAvatar").style.backgroundSize = "cover";
+  $("userAvatar").style.backgroundPosition = "center";
+}
 
       $("loginBtn").classList.toggle(
         "hidden",
@@ -2118,10 +2251,7 @@ function applyLanguage() {
         loggedIn
       );
 
-      $("logoutBtn").classList.toggle(
-        "hidden",
-        !loggedIn
-      );
+      $("logoutBtn").classList.add("hidden");
 
       if (!loggedIn) {
         profileReady = false;
@@ -2144,7 +2274,62 @@ function applyLanguage() {
       }
 
       loadStudentProfile(currentUser);
-    }
+       }
+    
+$("userAccountBtn").addEventListener("click", () => {
+  const dropdown = $("userAccountDropdown");
+  const isHidden = dropdown.classList.contains("hidden");
+
+  dropdown.classList.toggle("hidden", !isHidden);
+
+  $("userAccountBtn").setAttribute(
+    "aria-expanded",
+    String(isHidden)
+  );
+});
+
+document.addEventListener("click", event => {
+  const menu = $("userAccountMenu");
+
+  if (!menu.contains(event.target)) {
+    $("userAccountDropdown").classList.add("hidden");
+    $("userAccountBtn").setAttribute("aria-expanded", "false");
+  }
+});
+
+$("myAccountBtn").addEventListener("click", () => {
+  $("userAccountDropdown").classList.add("hidden");
+  $("userAccountBtn").setAttribute("aria-expanded", "false");
+
+  $("accountPanel").scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+});
+
+$("myStudyPathBtn").addEventListener("click", () => {
+  $("userAccountDropdown").classList.add("hidden");
+  $("userAccountBtn").setAttribute("aria-expanded", "false");
+
+  $("study").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+});
+
+$("accountLogoutBtn").addEventListener("click", async () => {
+  if (!supabaseClient) return;
+
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    console.error("Logout failed:", error);
+    showStatus($("mainStatus"), error.message, "error");
+    return;
+  }
+
+  $("userAccountDropdown").classList.add("hidden");
+});
 
     // 17. Initialize Supabase
 
