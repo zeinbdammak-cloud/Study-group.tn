@@ -1965,7 +1965,6 @@ $("authOverlay").addEventListener("click", event => {
 
   // 18. إنشاء حساب أو تسجيل الدخول بالبريد الإلكتروني
   $("authForm").addEventListener("submit", async event => {
-    console.log("AUTH FORM SUBMITTED");
     event.preventDefault();
     clearMessage("authMessage");
 
@@ -1991,20 +1990,12 @@ $("authOverlay").addEventListener("click", event => {
 
         if (data.session?.user) {
           renderAuthState(data.session.user);
+          closeAuth();
           await loadStudentProfile();
-          showSection("accountSection");
         } else {
           setMessage("authMessage", t("checkEmail"), "success");
         }
 
-      } else {
-        const { data, error } = await client.auth.signInWithPassword({
-          email,
-          password
-        });
-
-        if (error) throw error;
-        
       } else {
         const { data, error } = await client.auth.signInWithPassword({
           email,
@@ -2021,16 +2012,6 @@ $("authOverlay").addEventListener("click", event => {
         renderAuthState(data.user);
         closeAuth();
         await loadStudentProfile();
-
-      }
-
-
-     
-renderAuthState(data.user);
-closeAuth();
-await loadStudentProfile();
-
-
       }
 
     } catch (error) {
@@ -2043,18 +2024,6 @@ await loadStudentProfile();
     } finally {
       button.disabled = false;
     }
-  });
-
-  $("switchAuthBtn").addEventListener("click", () => {
-    openAuth(authMode === "signup" ? "login" : "signup");
-  });
-
-  $("togglePassword").addEventListener("click", () => {
-    $("password").type =
-      $("password").type === "password" ? "text" : "password";
-
-    $("togglePassword").textContent =
-      $("password").type === "password" ? t("show") : t("hide");
   });
 
   // 19. تسجيل الدخول باستخدام Google
