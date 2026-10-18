@@ -2115,7 +2115,9 @@ await loadStudentProfile();
 
   // 22. متابعة تغيّر حالة المصادقة
   client.auth.onAuthStateChange((_event, session) => {
-    setTimeout(async () => {
+  console.log("AUTH EVENT:", _event, "USER:", session?.user?.email || null);
+
+  setTimeout(async () => {
       renderAuthState(session?.user || null);
 
       if (session?.user) {
