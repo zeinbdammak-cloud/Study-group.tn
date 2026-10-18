@@ -2003,6 +2003,26 @@ $("authOverlay").addEventListener("click", event => {
         });
 
         if (error) throw error;
+        
+      } else {
+        const { data, error } = await client.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) throw error;
+
+        console.log("LOGIN RESULT:", {
+          userExists: !!data.user,
+          sessionExists: !!data.session
+        });
+
+        renderAuthState(data.user);
+        closeAuth();
+        await loadStudentProfile();
+
+      }
+
 
      
 renderAuthState(data.user);
