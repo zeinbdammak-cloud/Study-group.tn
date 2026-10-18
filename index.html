@@ -606,6 +606,97 @@ body {
   }
 }
 
+/* Popup authentication window */
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: #050816c9;
+  backdrop-filter: blur(9px);
+}
+
+.auth-overlay.hidden {
+  display: none !important;
+}
+
+.auth-dialog {
+  position: relative;
+  width: min(540px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 26px;
+  border: 1px solid #8275ff70;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #1b2340, #11182b);
+  color: #f3f4ff;
+  box-shadow: 0 25px 90px #0008;
+  animation: authPopupIn .22s ease-out;
+}
+
+.auth-dialog .panel {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.auth-dialog .section {
+  padding: 0;
+}
+
+.auth-dialog .field label,
+.auth-dialog .panel h2,
+.auth-dialog .panel h3 {
+  color: #f3f4ff;
+}
+
+.auth-dialog .status-line {
+  color: #b9c2dd;
+}
+
+.auth-dialog .field input {
+  background: #0e1528;
+  color: #fff;
+  border-color: #394363;
+}
+
+.auth-dialog .outline {
+  background: #222b45;
+  color: #fff;
+  border-color: #414c6d;
+}
+
+.auth-dialog .profile-notification-content {
+  margin-bottom: 12px;
+}
+
+@keyframes authPopupIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+body.auth-open {
+  overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .auth-dialog {
+    padding: 18px;
+    border-radius: 18px;
+  }
+}
+
   </style>
 </head>
 
@@ -705,8 +796,9 @@ body {
   </section>
 
   <!-- تسجيل الدخول وإنشاء الحساب -->
-  <section class="section wrap hidden" id="authSection">
-    <div class="panel">
+<div class="auth-overlay hidden" id="authOverlay">
+  <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="panel">
       <div class="split">
         <h2 id="authTitle" data-i18n="createAccount">إنشاء حساب</h2>
         <button class="btn outline small" id="closeAuthBtn" type="button" data-i18n="close">
@@ -759,7 +851,8 @@ body {
       </p>
     </div>
   </section>
-
+  </div>
+</div>
   <!-- الحساب والمسار الدراسي -->
   <section class="section wrap hidden" id="accountSection">
     <div class="section-heading">
@@ -1416,21 +1509,23 @@ body {
   }
 
   // 8. فتح نموذج التسجيل أو الدخول
-  function openAuth(mode) {
-    authMode = mode;
-    showSection("authSection");
-    applyLanguage();
-    clearMessage("authMessage");
+  
 
-    $("displayNameField").classList.toggle("hidden", mode !== "signup");
-    $("password").autocomplete =
-      mode === "signup" ? "new-password" : "current-password";
+function openAuth(mode) {
+  authMode = mode;
+  $("authOverlay").classList.remove("hidden");
+  document.body.classList.add("auth-open");
+  applyLanguage();
+  clearMessage("authMessage");
+  $("displayNameField").classList.toggle("hidden", mode !== "signup");
+  $("password").autocomplete =
+    mode === "signup" ? "new-password" : "current-password";
+}
 
-    $("authSection").scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  }
+function closeAuth() {
+  $("authOverlay").classList.add("hidden");
+  document.body.classList.remove("auth-open");
+}
 
   // 9. استرجاع المسار الدراسي المحفوظ
   async function loadStudentProfile() {
@@ -1858,9 +1953,15 @@ body {
     $("resourcesSection").scrollIntoView({ behavior: "smooth" });
   });
 
-  $("closeAuthBtn").addEventListener("click", () => {
-    showSection(currentUser ? "accountSection" : null);
-  });
+  
+$("closeAuthBtn").addEventListener("click", closeAuth);
+
+$("authOverlay").addEventListener("click", event => {
+  if (event.target === $("authOverlay")) {
+    closeAuth();
+  }
+});
+
 
   // 18. إنشاء حساب أو تسجيل الدخول بالبريد الإلكتروني
   $("authForm").addEventListener("submit", async event => {
@@ -1903,10 +2004,10 @@ body {
 
         if (error) throw error;
 
-        renderAuthState(data.user);
-await loadStudentProfile();
+       renderAuthState(data.user);
+closeAuth();
 showSection(null);
-$("profileNotification").classList.remove("hidden");
+await loadStudentProfile();
 
 
       }
