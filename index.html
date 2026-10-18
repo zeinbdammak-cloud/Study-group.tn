@@ -459,6 +459,153 @@
         flex: 1;
       }
     }
+    
+/* Study Group.tn — Dark purple & blue theme */
+:root {
+  --bg: #0b1020;
+  --card: #151c31;
+  --ink: #f3f4ff;
+  --muted: #b1bad2;
+  --primary: #8b7cff;
+  --primary2: #6d5dfc;
+  --line: #303955;
+  --soft: #242544;
+  --danger: #ff8585;
+  --good: #65e6a5;
+  --shadow: 0 14px 40px #00000035;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 15% 0%, #38286c 0, transparent 38%),
+    radial-gradient(ellipse at 90% 15%, #152e59 0, transparent 35%),
+    var(--bg);
+  color: var(--ink);
+}
+
+.topbar {
+  background: #0b1020ed;
+  border-bottom-color: var(--line);
+}
+
+.feature,
+.panel,
+.subject-card {
+  background: linear-gradient(145deg, #19213a, #131a2d);
+  border-color: var(--line);
+}
+
+.field input,
+.field select,
+.field textarea {
+  background: #0e1528;
+  color: var(--ink);
+  border-color: #394363;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px #8b7cff25;
+}
+
+.outline {
+  background: #1a2238;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.dropdown {
+  background: #151c31;
+  border-color: var(--line);
+}
+
+.dropdown button {
+  color: var(--ink);
+}
+
+.dropdown button:hover {
+  background: var(--soft);
+}
+
+.empty {
+  background: #151c31;
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+.notice.success {
+  background: #123529;
+  color: #8ff0bb;
+}
+
+.notice.error {
+  background: #3b2028;
+  color: #ffaaaa;
+}
+
+.footer {
+  border-top-color: var(--line);
+}
+
+#profileNotification {
+  margin-top: 18px;
+  margin-bottom: 12px;
+}
+
+.profile-notification-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  border: 1px solid #8b7cff70;
+  border-radius: 18px;
+  background: linear-gradient(120deg, #242044, #172b49);
+  color: #f5f3ff;
+  box-shadow: 0 10px 30px #00000025;
+}
+
+.profile-notification-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: #8b7cff25;
+  font-size: 1.5rem;
+}
+
+.profile-notification-text {
+  flex: 1;
+}
+
+.profile-notification-text strong {
+  display: block;
+  color: #c6bdff;
+}
+
+.profile-notification-text p {
+  margin: 4px 0 0;
+  color: #d6d9ed;
+}
+
+@media (max-width: 600px) {
+  .profile-notification-content {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .profile-notification-text {
+    min-width: 0;
+  }
+
+  #chooseProfileBtn {
+    width: 100%;
+  }
+}
+
   </style>
 </head>
 
@@ -497,6 +644,21 @@
     </div>
   </div>
 </header>
+
+<div class="wrap hidden" id="profileNotification" role="status">
+  <div class="profile-notification-content">
+    <div class="profile-notification-icon">🎓</div>
+    <div class="profile-notification-text">
+      <strong>مرحبًا بك في Study Group.tn!</strong>
+      <p id="profileNotificationText">
+        اختَر مستواك الدراسي وشعبتك لتظهر لك الموارد المناسبة.
+      </p>
+    </div>
+    <button class="btn primary small" id="chooseProfileBtn" type="button">
+      اختيار المستوى
+    </button>
+  </div>
+</div>
 
 <main>
   <section class="hero wrap" id="hero">
