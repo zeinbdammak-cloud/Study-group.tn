@@ -631,6 +631,18 @@
 </head>
 
 <body>
+  <div id="profileNotification"
+     style="display:none; background:#8b7cff; color:white;
+            padding:15px; text-align:center; font-weight:bold;">
+
+  🔔 مرحبًا بيك! لازم تختار مستواك الدراسي وشعبتك قبل ما تبدأ.
+
+  <a href="#study"
+     style="color:white; text-decoration:underline; margin-right:10px;">
+    اختار مستواك الآن ←
+  </a>
+
+</div>
 
   <header class="navbar">
     <div class="container nav-inner">
@@ -1713,8 +1725,9 @@ function applyLanguage() {
         show ? "" : "none";
     }
 
-    function showGuestState() {
-      profileReady = false;
+   function showGuestState() {
+  profileReady = false;
+  $("profileNotification").style.display = "none";
 
       $("guestStudyMessage").style.display = "";
 
@@ -1728,7 +1741,7 @@ function applyLanguage() {
 
     function showProfileForm() {
       profileReady = false;
-
+       $("profileNotification").style.display = "block";
       $("guestStudyMessage").style.display = "none";
 
       $("accountPanel").classList.add("visible");
@@ -1741,9 +1754,9 @@ function applyLanguage() {
       updateAccountSelection();
     }
 
-    function showSavedProfile() {
-      profileReady = true;
-
+   function showSavedProfile() {
+  profileReady = true;
+  $("profileNotification").style.display = "none";
       $("guestStudyMessage").style.display = "none";
 
       $("accountPanel").classList.add("visible");
