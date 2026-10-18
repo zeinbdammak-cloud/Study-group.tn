@@ -1074,6 +1074,43 @@
   </div>
 
   <div class="study-panel">
+    <div class="upload-panel">
+  <h3>📤 شارك موردًا دراسيًا</h3>
+  <p>ساعد زملاءك بمشاركة درس أو ملخّص أو تمرين.</p>
+
+  <form id="uploadResourceForm">
+    <label for="resourceTitle">عنوان المورد</label>
+    <input id="resourceTitle" type="text" required maxlength="150"
+      placeholder="مثال: ملخّص درس الوراثة">
+<label for="resourceType">نوع المورد</label>
+<select id="resourceType" required>
+  <option value="">اختر نوع المورد</option>
+  <option value="summary">ملخّص</option>
+  <option value="lesson">درس</option>
+  <option value="exercise">تمرين</option>
+  <option value="other">مورد آخر</option>
+</select>
+    <label for="resourceSubject">المادة الدراسية</label>
+    <input id="resourceSubject" type="text" required
+      placeholder="مثال: علوم الحياة والأرض">
+
+    <label for="resourceDescription">وصف المورد (اختياري)</label>
+    <textarea id="resourceDescription"
+      placeholder="اكتب وصفًا مختصرًا للمورد"></textarea>
+
+    <label for="resourceFile">اختر الملف</label>
+    <input id="resourceFile" type="file"
+      accept=".pdf,.jpg,.jpeg,.png" required>
+
+    <p>الأنواع المسموحة: PDF وJPG وPNG — الحجم الأقصى: 10 MB.</p>
+
+    <button class="btn btn-primary" type="submit">
+      📤 نشر المورد
+    </button>
+  </form>
+
+  <p id="uploadResourceStatus" role="status"></p>
+</div>
     <p id="resourcesTrack"></p>
     <div id="resourcesList">
       <p>جارٍ تحميل الموارد الدراسية...</p>
@@ -2405,7 +2442,59 @@ clearStatus($("mainStatus"));
               card.appendChild(link);
             }
           }
+const reportBtn = document.createElement("button");
+reportBtn.type = "button";
+reportBtn.className = "btn";
+reportBtn.textContent =
+  language === "ar" ? "🚩 الإبلاغ عن ملف" : "🚩 Signaler";
 
+reportBtn.addEventListener("click", async () => {
+  if (!currentUser) return;
+
+  const reason = prompt(
+    language === "ar"
+      ? "علاش تحب تبلّغ عن الملف؟ اكتب السبب (5 أحرف على الأقل):"
+      : "Pourquoi signaler ce fichier ? (5 caractères minimum)"
+  );
+
+  if (reason === null) return;
+
+  const trimmedReason = reason.trim();
+
+  if (trimmedReason.length < 5) {
+    alert("الرجاء كتابة سبب واضح للإبلاغ (5 أحرف على الأقل).");
+    return;
+  }
+
+  reportBtn.disabled = true;
+
+  try {
+    const { error } = await supabaseClient
+      .from("resource_reports")
+      .insert({
+        resource_id: resource.id,
+        reported_by: currentUser.id,
+        reason: trimmedReason
+      });
+
+    if (error) {
+      if (error.code === "23505") {
+        alert("سبق لك الإبلاغ عن هذا الملف.");
+        return;
+      }
+      throw error;
+    }
+
+    alert("تم إرسال البلاغ بنجاح. شكرًا لمساعدتك!");
+  } catch (error) {
+    console.error("Report failed:", error);
+    alert("تعذّر إرسال البلاغ. حاول مجددًا.");
+  } finally {
+    reportBtn.disabled = false;
+  }
+});
+
+card.appendChild(reportBtn);
           resourcesList.appendChild(card);
         }
       } catch (error) {
@@ -2550,8 +2639,133 @@ $("resourcesBtn").addEventListener("click", async () => {
     top: 0,
     behavior: "smooth"
   });
+
 });
+
+// رفع ونشر مورد دراسي
+$("uploadResourceForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const statusElement = $("uploadResourceStatus");
+  const submitButton = event.currentTarget.querySelector(
+    'button[type="submit"]'
+  );
+
+  if (!currentUser || !profileReady || !supabaseClient) {
+    statusElement.textContent =
+      "يجب تسجيل الدخول وحفظ المسار الدراسي أولًا.";
+    return;
+  }
+
+  const title = $("resourceTitle").value.trim();
+  const subject = $("resourceSubject").value.trim();
+  const description = $("resourceDescription").value.trim();
+  const resourceType = $("resourceType").value;
+  const file = $("resourceFile").files[0];
+
+  const schoolYearMap = {
+    "1": "1ere",
+    "2": "2eme",
+    "3": "3eme",
+    "4": "4eme"
+  };
+
+  const schoolYear =
+    schoolYearMap[$("levelSelect").value] ||
+    $("levelSelect").value;
+
+  const section = $("branchSelect").value;
+
+  if (!title || !subject || !resourceType || !file) {
+    statusElement.textContent = "يرجى إكمال الحقول المطلوبة.";
+    return;
+  }
+
+  if (!["summary", "lesson", "exercise", "other"].includes(resourceType)) {
+    statusElement.textContent = "نوع المورد غير صالح.";
+    return;
+  }
+
+  if (file.size > 10 * 1024 * 1024) {
+    statusElement.textContent = "حجم الملف يجب ألا يتجاوز 10 MB.";
+    return;
+  }
+
+  const allowedTypes = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png"
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+    statusElement.textContent =
+      "الملفات المسموحة هي PDF وJPG وPNG فقط.";
+    return;
+  }
+
+  submitButton.disabled = true;
+  statusElement.textContent = "جارٍ رفع الملف ونشر المورد...";
+
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const filePath =
+    `${currentUser.id}/${crypto.randomUUID()}_${safeName}`;
+
+  let uploaded = false;
+
+  try {
+    const { error: uploadError } = await supabaseClient.storage
+      .from("study-files")
+      .upload(filePath, file, {
+        contentType: file.type,
+        upsert: false
+      });
+
+    if (uploadError) throw uploadError;
+    uploaded = true;
+
+    const { error: insertError } = await supabaseClient
+      .from("resources")
+      .insert({
+        title,
+        description: description || null,
+        subject,
+        school_year: schoolYear,
+        section,
+        resource_type: resourceType,
+        file_path: filePath,
+        created_by: currentUser.id,
+        status: "approved"
+      });
+
+    if (insertError) throw insertError;
+
+    statusElement.textContent = "تم نشر المورد بنجاح! ✅";
+    event.currentTarget.reset();
+
+    await loadResources(schoolYear, section);
+
+  } catch (error) {
+    console.error("Resource upload failed:", error);
+
+    if (uploaded) {
+      const { error: cleanupError } = await supabaseClient.storage
+        .from("study-files")
+        .remove([filePath]);
+
+      if (cleanupError) {
+        console.error("File cleanup failed:", cleanupError);
+      }
+    }
+
+    statusElement.textContent =
+      "تعذّر نشر المورد. افتحي Console في المتصفح للاطلاع على الخطأ.";
+  } finally {
+    submitButton.disabled = false;
+  }
+});
+
 $("myAccountBtn").addEventListener("click", () => {
+
   $("userAccountDropdown").classList.add("hidden");
   $("userAccountBtn").setAttribute("aria-expanded", "false");
 
