@@ -1904,9 +1904,11 @@ body {
         if (error) throw error;
 
         renderAuthState(data.user);
-        await loadStudentProfile();
-        showSection("accountSection");
-        $("accountSection").scrollIntoView({ behavior: "smooth" });
+await loadStudentProfile();
+showSection(null);
+$("profileNotification").classList.remove("hidden");
+
+
       }
 
     } catch (error) {
