@@ -2004,9 +2004,9 @@ $("authOverlay").addEventListener("click", event => {
 
         if (error) throw error;
 
-       renderAuthState(data.user);
+     
+renderAuthState(data.user);
 closeAuth();
-showSection(null);
 await loadStudentProfile();
 
 
