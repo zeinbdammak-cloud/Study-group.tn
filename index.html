@@ -1061,6 +1061,57 @@
       </div>
     </section>
 
+    <!-- Student Profile Page -->
+    <section id="profilePage" class="container section hidden">
+
+      <div class="section-heading">
+        <h2>حسابي 💜</h2>
+        <p>معلومات حسابك ومسارك الدراسي</p>
+      </div>
+
+      <div class="study-panel">
+
+        <div style="text-align:center; margin-bottom:24px;">
+          <div id="profileAvatar"
+               style="width:80px; height:80px; border-radius:50%;
+                      background:#eee8ff; margin:0 auto 12px;
+                      display:flex; align-items:center;
+                      justify-content:center; font-size:36px;">
+            👤
+          </div>
+
+          <h3 id="profileName">اسم الطالب</h3>
+          <p id="profileEmail" class="account-email"></p>
+        </div>
+
+        <hr>
+
+        <h3>معلوماتي الدراسية 🎓</h3>
+
+        <p>
+          <strong>السنة الدراسية:</strong>
+          <span id="profileLevel">—</span>
+        </p>
+
+        <p>
+          <strong>الشعبة:</strong>
+          <span id="profileBranch">—</span>
+        </p>
+
+        <p id="profileOptionRow">
+          <strong>المادة الاختيارية:</strong>
+          <span id="profileOption">—</span>
+        </p>
+
+        <button id="profileBackBtn"
+                class="btn btn-secondary"
+                type="button">
+          العودة إلى الموقع
+        </button>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Footer -->
@@ -1871,10 +1922,15 @@ function applyLanguage() {
         show ? "" : "none";
     }
 
-   function showGuestState() {
+ function showGuestState() {
   profileReady = false;
-  $("profileNotification").style.display = "none";
 
+  $("profilePage").classList.add("hidden");
+  $("home").classList.remove("hidden");
+  $("features").classList.remove("hidden");
+  $("study").classList.remove("hidden");
+
+  $("profileNotification").style.display = "none";
       $("guestStudyMessage").style.display = "";
 
       showAcademicSelection(false);
@@ -2064,6 +2120,56 @@ function applyLanguage() {
         : "password";
     });
 
+function updateProfilePage(user) {
+  if (!user) return;
+
+  const metadata = user.user_metadata || {};
+
+  const name =
+    metadata.full_name?.trim() ||
+    metadata.name?.trim() ||
+    metadata.display_name?.trim() ||
+    "طالب Study Group.tn";
+
+  $("profileName").textContent = name;
+  $("profileEmail").textContent = user.email || "—";
+
+  const avatarUrl = metadata.avatar_url || metadata.picture;
+
+  $("profileAvatar").textContent = avatarUrl ? "" : "👤";
+  $("profileAvatar").style.backgroundImage = avatarUrl
+    ? `url("${avatarUrl}")`
+    : "none";
+  $("profileAvatar").style.backgroundSize = "cover";
+  $("profileAvatar").style.backgroundPosition = "center";
+
+  const levelNames = {
+    "1": "الأولى ثانوي",
+    "2": "الثانية ثانوي",
+    "3": "الثالثة ثانوي",
+    "4": "الرابعة ثانوي"
+  };
+
+  const branch = $("branchSelect");
+  const branchName =
+    branch.selectedOptions[0]?.textContent || "—";
+
+  const option = $("optionSelect");
+  const optionName =
+    option.selectedOptions[0]?.textContent || "—";
+
+  $("profileLevel").textContent =
+    levelNames[$("levelSelect").value] || "—";
+
+  $("profileBranch").textContent = branchName;
+
+  $("profileOption").textContent =
+    option.value ? optionName : "لا توجد مادة اختيارية";
+
+  $("profileOptionRow").style.display =
+    option.value ? "" : "none";
+}
+
     // 15. Load the saved student profile
 
     async function loadStudentProfile(user) {
@@ -2160,6 +2266,8 @@ function applyLanguage() {
         }
 
         showSavedProfile();
+
+        updateProfilePage(user);
 
         clearStatus($("mainStatus"));
 
@@ -2278,15 +2386,34 @@ document.addEventListener("click", event => {
   }
 });
 
+
 $("myAccountBtn").addEventListener("click", () => {
   $("userAccountDropdown").classList.add("hidden");
   $("userAccountBtn").setAttribute("aria-expanded", "false");
 
-  $("accountPanel").scrollIntoView({
-    behavior: "smooth",
-    block: "center"
+  $("home").classList.add("hidden");
+  $("features").classList.add("hidden");
+  $("study").classList.add("hidden");
+  $("profilePage").classList.remove("hidden");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
   });
 });
+
+$("profileBackBtn").addEventListener("click", () => {
+  $("profilePage").classList.add("hidden");
+  $("home").classList.remove("hidden");
+  $("features").classList.remove("hidden");
+  $("study").classList.remove("hidden");
+
+  $("home").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+});
+
 
 $("myStudyPathBtn").addEventListener("click", () => {
   $("userAccountDropdown").classList.add("hidden");
@@ -2663,6 +2790,8 @@ $("accountLogoutBtn").addEventListener("click", async () => {
           // The database confirmed the insertion
 
           showSavedProfile();
+          
+          updateProfilePage(currentUser);
 
           showStatus(
             $("mainStatus"),
