@@ -795,7 +795,6 @@
 
   <div id="userAccountDropdown" class="hidden">
     <button id="myAccountBtn" type="button">حسابي</button>
-    <button id="myStudyPathBtn" type="button">مساري الدراسي</button>
     <button id="accountLogoutBtn" type="button">تسجيل الخروج</button>
   </div>
 </div>
@@ -2420,16 +2419,6 @@ $("profileBackBtn").addEventListener("click", () => {
   });
 });
 
-
-$("myStudyPathBtn").addEventListener("click", () => {
-  $("userAccountDropdown").classList.add("hidden");
-  $("userAccountBtn").setAttribute("aria-expanded", "false");
-
-  $("study").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-});
 
 $("accountLogoutBtn").addEventListener("click", async () => {
   if (!supabaseClient) return;
