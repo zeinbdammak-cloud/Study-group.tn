@@ -1922,7 +1922,8 @@ function applyLanguage() {
         show ? "" : "none";
     }
 
- function showGuestState() {
+ 
+function showGuestState() {
   profileReady = false;
 
   $("profilePage").classList.add("hidden");
@@ -1931,15 +1932,14 @@ function applyLanguage() {
   $("study").classList.remove("hidden");
 
   $("profileNotification").style.display = "none";
-      $("guestStudyMessage").style.display = "";
+  $("guestStudyMessage").style.display = "";
 
-      showAcademicSelection(false);
+  showAcademicSelection(false);
 
-      $("accountPanel").classList.remove("visible");
+  $("accountPanel").classList.remove("visible");
 
-      $("studyNote").textContent =
-        t("guestMessage");
-    }
+  $("studyNote").textContent = t("guestMessage");
+}
 
     function showProfileForm() {
       profileReady = false;
@@ -1956,20 +1956,25 @@ function applyLanguage() {
       updateAccountSelection();
     }
 
-   function showSavedProfile() {
+   
+function showSavedProfile() {
   profileReady = true;
+
   $("profileNotification").style.display = "none";
-      $("guestStudyMessage").style.display = "none";
+  $("guestStudyMessage").style.display = "none";
 
-      $("accountPanel").classList.add("visible");
+  $("accountPanel").classList.add("visible");
 
-      showAcademicSelection(false);
+  showAcademicSelection(false);
 
-      $("studyNote").textContent =
-        t("profileSaved");
+  $("studyNote").textContent = t("profileSaved");
 
-      updateAccountSelection();
-    }
+  updateAccountSelection();
+
+  // Hide the entire study section on the homepage
+  $("study").classList.add("hidden");
+}
+
 
     // 11. Switch Arabic / French
 
@@ -2265,12 +2270,13 @@ function updateProfilePage(user) {
           $("optionSelect").value = savedOption;
         }
 
-        showSavedProfile();
+      showSavedProfile();
 
-        updateProfilePage(user);
+updateProfilePage(user);
 
-        clearStatus($("mainStatus"));
+$("study").classList.add("hidden");
 
+clearStatus($("mainStatus"));
       } catch (error) {
         console.error("Loading profile failed:", error);
 
