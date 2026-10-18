@@ -1573,33 +1573,46 @@
 
     // 7. Update account information
 
-    function updateAccountSelection() {
-      const level = $("levelSelect").value;
-      const section = $("branchSelect").value;
-      const optionalLanguage = $("optionSelect").value;
+function updateAccountSelection() {
+  const level = $("levelSelect").value;
+  const section = $("branchSelect").value;
+  const optionalLanguage = $("optionSelect").value;
 
-      $("accountLevel").textContent =
-        getLevelName(level);
+  // Show optional subject for years 3 and 4
+  const showOptionField =
+    level === "3" || level === "4";
 
-      $("accountBranch").textContent =
-        getBranchName(level, section);
+  $("optionField").style.display =
+    showOptionField ? "" : "none";
 
-      $("accountBranchRow").style.display =
-        level === "1" ? "none" : "";
+  // Update account information
+  $("accountLevel").textContent =
+    getLevelName(level);
 
-      const showOption =
-        (level === "3" || level === "4") &&
-        Boolean(optionalLanguage);
+  $("accountBranch").textContent =
+    getBranchName(level, section);
 
-      $("accountOptionRow").style.display =
-        showOption ? "" : "none";
+  $("accountBranchRow").style.display =
+    level === "1" ? "none" : "";
 
-      $("accountOption").textContent =
-        showOption
-          ? getOptionName(optionalLanguage)
-          : "";
-    }
+  const showOption =
+    showOptionField && Boolean(optionalLanguage);
 
+  $("accountOptionRow").style.display =
+    showOption ? "" : "none";
+
+  $("accountOption").textContent =
+    showOption
+      ? getOptionName(optionalLanguage)
+      : "";
+}
+
+
+// 8. Apply language
+function applyLanguage() {
+
+// 8. Apply language
+function applyLanguage() {
     // 8. Apply language
 
     function applyLanguage() {
