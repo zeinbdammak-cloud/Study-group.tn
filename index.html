@@ -2740,8 +2740,7 @@ $("uploadResourceForm").addEventListener("submit", async event => {
     if (insertError) throw insertError;
 
     statusElement.textContent = "تم نشر المورد بنجاح! ✅";
-    event.currentTarget.reset();
-
+$("uploadResourceForm").reset();
     await loadResources(schoolYear, section);
 
   } catch (error) {
