@@ -2197,7 +2197,7 @@ $("userAccountMenu").classList.toggle(
 const accountName =
   currentUser?.user_metadata?.full_name?.trim() ||
   currentUser?.user_metadata?.name?.trim() ||
-  currentUser?.email?.split("@")[0] ||
+  currentUser?.user_metadata?.display_name?.trim() ||
   "حسابي";
 
 $("userAccountName").textContent = accountName;
