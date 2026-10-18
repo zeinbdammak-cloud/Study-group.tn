@@ -2284,11 +2284,13 @@ function updateProfilePage(user) {
           $("optionSelect").value = savedOption;
         }
 
-      showSavedProfile();
+     showSavedProfile();
 
 updateProfilePage(user);
 
 $("study").classList.add("hidden");
+
+await loadResources(data.school_year, data.section);
 
 clearStatus($("mainStatus"));
       } catch (error) {
@@ -2305,6 +2307,113 @@ clearStatus($("mainStatus"));
             : "Impossible de charger ton profil. Actualise la page.",
           "error"
         );
+      }
+    }
+
+    // Load resources for the student's saved school track
+    async function loadResources(schoolYear, section) {
+      const resourcesSection = $("resourcesSection");
+      const resourcesList = $("resourcesList");
+      const resourcesTrack = $("resourcesTrack");
+
+      resourcesSection.classList.remove("hidden");
+      resourcesList.replaceChildren();
+
+      resourcesTrack.textContent =
+        language === "ar"
+          ? "الموارد الخاصة بمسارك الدراسي"
+          : "Ressources de ton parcours scolaire";
+
+      const loadingMessage = document.createElement("p");
+      loadingMessage.textContent =
+        language === "ar"
+          ? "جارٍ تحميل الموارد..."
+          : "Chargement des ressources...";
+      resourcesList.appendChild(loadingMessage);
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("resources")
+          .select(
+            "id, title, description, subject, resource_type, file_path"
+          )
+          .eq("school_year", schoolYear)
+          .eq("section", section)
+          .eq("status", "approved")
+          .order("title", { ascending: true });
+
+        if (error) throw error;
+
+        if (!currentUser) return;
+
+        resourcesList.replaceChildren();
+
+        if (!data || data.length === 0) {
+          const emptyMessage = document.createElement("p");
+          emptyMessage.textContent =
+            language === "ar"
+              ? "ما فماش موارد متاحة لمسارك حاليًا. تفقد القسم لاحقًا!"
+              : "Aucune ressource disponible pour le moment.";
+          resourcesList.appendChild(emptyMessage);
+          return;
+        }
+
+        for (const resource of data) {
+          const card = document.createElement("article");
+          card.className = "resource-card";
+
+          const title = document.createElement("h3");
+          title.textContent = resource.title || "مورد دراسي";
+          card.appendChild(title);
+
+          if (resource.subject) {
+            const subject = document.createElement("p");
+            subject.textContent =
+              (language === "ar" ? "المادة: " : "Matière : ") +
+              resource.subject;
+            card.appendChild(subject);
+          }
+
+          if (resource.description) {
+            const description = document.createElement("p");
+            description.textContent = resource.description;
+            card.appendChild(description);
+          }
+
+          if (resource.file_path) {
+            const { data: fileData, error: fileError } =
+              await supabaseClient.storage
+                .from("study-files")
+                .createSignedUrl(resource.file_path, 3600);
+
+            if (!fileError && fileData?.signedUrl) {
+              const link = document.createElement("a");
+              link.href = fileData.signedUrl;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+              link.textContent =
+                language === "ar"
+                  ? "فتح المورد 📄"
+                  : "Ouvrir la ressource 📄";
+              card.appendChild(link);
+            }
+          }
+
+          resourcesList.appendChild(card);
+        }
+      } catch (error) {
+        console.error("Loading resources failed:", error);
+
+        if (!currentUser) return;
+
+        resourcesList.replaceChildren();
+
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent =
+          language === "ar"
+            ? "تعذّر تحميل الموارد. حاولي مجددًا لاحقًا."
+            : "Impossible de charger les ressources.";
+        resourcesList.appendChild(errorMessage);
       }
     }
 
